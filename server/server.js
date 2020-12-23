@@ -1,7 +1,7 @@
 const express = require("express");
-const connectDB = require("../DB/config");
+const connectDB = require("../config/db_config");
 const cors = require("cors");
-
+const passport = require("passport");
 const profile = require("../routes/api/profile");
 const users = require("../routes/api/users");
 const posts = require("../routes/api/posts");
@@ -18,6 +18,10 @@ app.use(
 // body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// passport middleware
+app.use(passport.initialize());
+require("../config/passport")(passport);
 
 //connect to mongoDB Allas
 connectDB();

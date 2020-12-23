@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
-//mongoDB connect string
-const conn =
-  "mongodb+srv://dbAdmin:dbAdmin@cluster0.yonwt.mongodb.net/portfoliodb?retryWrites=true&w=majority";
+const keys = require("./keys");
 
 const connectDB = async () => {
   console.log("connecting to mongoose db...");
   await mongoose
-    .connect(conn, {
+    .connect(keys.mongoURL, {
       useUnifiedTopology: true,
       useNewUrlParser: true
     })

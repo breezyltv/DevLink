@@ -7,6 +7,9 @@ const keys = require("../../config/keys");
 const passport = require("passport");
 // load user model
 const User = require("../../model/User");
+// load validation
+const validateRegisterInput = require("../../validation/register_valid");
+const validateLoginInput = require("../../validation/login_valid");
 
 router.get("/info", (req, res) =>
   res.send({ name: "vu le", message: "i'm a software" })
@@ -16,6 +19,12 @@ router.get("/info", (req, res) =>
 // @desc    Register a user
 // @access  Public
 router.post("/register", (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+  //check validation
+  if (!isValid) {
+    return res.status(400).send(errors);
+  }
+
   //check if email is in database
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
@@ -41,7 +50,7 @@ router.post("/register", (req, res) => {
           if (err) throw err;
           //saving encrypted password to model
           newUser.password = hash;
-          //saving model
+          //saving model to mongoDB
           newUser
             .save()
             .then(user => res.send(user))
@@ -56,12 +65,18 @@ router.post("/register", (req, res) => {
 // @desc    Login a user and return JSON Web Token
 // @access  Public
 router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+  //check validation
+  if (!isValid) {
+    return res.status(400).send(errors);
+  }
   const email = req.body.email;
   const password = req.body.password;
   //check user by email in model
   User.findOne({ email }).then(user => {
     if (!user) {
-      return res.status(400).send("User does not exist");
+      errors.email = "User does not exist";
+      return res.status(400).send(errors);
     }
     //check password if it's match
     bcrypt.compare(password, user.password).then(isMatched => {
@@ -77,7 +92,7 @@ router.post("/login", (req, res) => {
         jwt.sign(
           payload,
           keys.secretOrKey,
-          { expiresIn: 3600 },
+          { expiresIn: 72000 }, //set expired time
           (err, token) => {
             if (err) throw err;
             res.send({
@@ -88,7 +103,8 @@ router.post("/login", (req, res) => {
           }
         );
       } else {
-        return res.status(400).send({ password: "password is incorrect" });
+        errors.password = "password is incorrect";
+        return res.status(400).send(errors);
       }
     });
   });

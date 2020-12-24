@@ -33,6 +33,23 @@ const ProfileSchema = new Schema({
   githubusername: {
     type: String
   },
+  project: [
+    {
+      title: {
+        type: String,
+        required: true
+      },
+      description: {
+        type: String
+      },
+      github_link: {
+        type: String
+      },
+      demo_link: {
+        type: String
+      }
+    }
+  ],
   experience: [
     {
       title: {
@@ -44,8 +61,7 @@ const ProfileSchema = new Schema({
         required: true
       },
       location: {
-        type: String,
-        required: true
+        type: String
       },
       from: {
         type: Date,

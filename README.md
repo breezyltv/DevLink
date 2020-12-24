@@ -1,32 +1,36 @@
 # A simple web app project that applies CRUD
 
-# Features
+# Features:
 
 - MVC architecture
 
-## Database:
+### Database:
 
 - MongoDB Atlas
 
-## Backend:
+### Backend:
 
 - Node.js/express API
-- Encrypt password by using bcryptjs
-- Jwt token: sign a token/ set expired time
+- bcryptjs: Encrypt password
+- Jwt token: sign a token for user/ set expired time
 - Validator: validate inputs
-- Passport: get/check current user
+- Passport: get/check current user, protect private routes
 
-## Frontend:
+### Frontend:
 
 - Reactjs framework
 - Functional programing
 - React Hook
 - React-redux
-- UI: ant design
+- UI: Ant design
 
 ## Available Scripts
 
-In the project directory, you can run:
+Clone project and in the project directory, you can run:
+
+### 'npm install'
+
+then:
 
 ### `yarn start`
 

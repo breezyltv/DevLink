@@ -7,9 +7,6 @@ module.exports = validateLoginInput = data => {
   data.password = !isEmpty(data.password) ? data.password : "";
   data.email = !isEmpty(data.email) ? data.email : "";
 
-  if (!validator.isLength(data.password, { min: 5, max: 30 })) {
-    errors.password = "Password must be between 5 and 30 letters!";
-  }
   if (!validator.isEmail(data.email)) {
     errors.email = "Email is invalid";
   }

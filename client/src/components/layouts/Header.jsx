@@ -11,7 +11,7 @@ const HeaderLayout = () => {
     <nav className="menuBar">
       <div className="logo">
         <a href="">
-          <img src={logo} width="70"></img>
+          <img src={logo}></img>
         </a>
       </div>
       <div className="menuCon">

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Menu, Icon } from "antd";
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -6,7 +7,7 @@ const LeftMenu = () => {
   return (
     <Menu mode="horizontal">
       <Menu.Item key="mail">
-        <a href="">Home</a>
+        <Link to="/">Home</Link>
       </Menu.Item>
       <SubMenu title={<span>Blogs</span>}>
         <MenuItemGroup title="Item 1">

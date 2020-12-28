@@ -22,7 +22,7 @@ module.exports = validateRegisterInput = data => {
   if (!validator.isLength(data.password, { min: 6, max: 30 })) {
     errors.password = "Password must be between 6 and 30 letters!";
   }
-  if (!validator.equals(data.confirm_password)) {
+  if (!validator.equals(data.password, data.confirm_password)) {
     errors.confirm_password = "Password is not matched!";
   }
   if (!validator.isEmail(data.email)) {

@@ -26,21 +26,21 @@ module.exports = validateRegisterInput = data => {
     errors.confirm_password = "Password is not matched!";
   }
   if (!validator.isEmail(data.email)) {
-    errors.email = "Email is invalid";
+    errors.email = "Email is invalid!";
   }
   // validator only check a string and data.first_name is a object,
   // we need check it first from the line code above
   if (validator.isEmpty(data.first_name)) {
-    errors.first_name = "First name is required";
+    errors.first_name = "First name is required!";
   }
   if (validator.isEmpty(data.last_name)) {
-    errors.last_name = "Last name is required";
+    errors.last_name = "Last name is required!";
   }
   if (validator.isEmpty(data.password)) {
-    errors.password = "Password is required";
+    errors.password = "Password is required!";
   }
   if (validator.isEmpty(data.confirm_password)) {
-    errors.confirm_password = "Confirm password is required";
+    errors.confirm_password = "Confirm password is required!";
   }
 
   return {

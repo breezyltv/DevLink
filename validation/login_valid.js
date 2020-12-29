@@ -8,10 +8,10 @@ module.exports = validateLoginInput = data => {
   data.email = !isEmpty(data.email) ? data.email : "";
 
   if (!validator.isEmail(data.email)) {
-    errors.email = "Email is invalid";
+    errors.email = "Email is invalid!";
   }
   if (validator.isEmpty(data.password)) {
-    errors.password = "Password is required";
+    errors.password = "Password is required!";
   }
 
   return {

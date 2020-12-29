@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 import {
   Form,
   Input,
@@ -15,13 +15,40 @@ import {
 } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-import { domains } from "../../utils/util";
+import { validateStatus, domains } from "../../utils/util";
+import { login } from "../../actions/authAction";
 
 const Login = () => {
-  const [errors, setErrors] = useState({});
   const { Title } = Typography;
-  const onFinish = values => {
-    console.log("Received values of form: ", values);
+
+  const [errorStatus, setErrorStatus] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  //get errors from backend by redux store
+  let errors = useSelector(state => state.errors);
+  const auth = useSelector(state => state.auth);
+  useEffect(() => {
+    //clean up errors message from backend
+    if (errors) {
+      setErrorStatus(false);
+    }
+    //check if user already logged
+    if (auth.isAuthenticated) {
+      history.push("/dashboard");
+    }
+  }, [auth]);
+
+  const onFinish = userData => {
+    //console.log("Received login values of form: ", userData);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setErrorStatus(true);
+      //dispatch to login
+      dispatch(login(userData));
+    }, 500);
   };
 
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
@@ -42,8 +69,8 @@ const Login = () => {
   //removing error alert from backend when input has been on change
   const onInputChange = (value, type) => {
     if (value) {
-      errors[type] = null;
-      setErrors({ ...errors });
+      setLoading(false);
+      errors[type] = undefined;
     }
   };
 
@@ -61,11 +88,13 @@ const Login = () => {
           }}
           onFinish={onFinish}
         >
-          {errors.email && (
-            <Alert message={errors.email} type="error" showIcon />
-          )}
           <Form.Item
             name="email"
+            hasFeedback
+            //for displaying errors from backend
+            {...validateStatus(errors.email, errorStatus)}
+            //validateStatus={errors.email && errorStatus ? "error" : ""}
+            //help={errorStatus ? errors.email : ""}
             rules={[
               {
                 type: "email",
@@ -85,11 +114,12 @@ const Login = () => {
               />
             </AutoComplete>
           </Form.Item>
-          {errors.password && (
-            <Alert message={errors.password} type="error" showIcon />
-          )}
+
           <Form.Item
             name="password"
+            hasFeedback
+            //for displaying errors from backend
+            {...validateStatus(errors.password, errorStatus)}
             rules={[
               {
                 required: true,
@@ -117,6 +147,7 @@ const Login = () => {
           <Form.Item>
             <Button
               type="primary"
+              loading={loading}
               htmlType="submit"
               className="login-form-button"
             >

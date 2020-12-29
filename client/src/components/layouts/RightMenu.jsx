@@ -9,7 +9,7 @@ const RightMenu = () => {
         <Link to="/login">Login</Link>
       </Menu.Item>
       <Menu.Item key="app">
-        <Link to="/register">Register </Link>
+        <Link to="/register">Register</Link>
       </Menu.Item>
     </Menu>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { domains } from "../../utils/util";
+import { useHistory } from "react-router-dom";
+import { validateStatus, domains } from "../../utils/util";
 import { registerUser } from "../../actions/authAction";
 import {
   Form,
@@ -11,8 +12,7 @@ import {
   Row,
   Col,
   Typography,
-  Divider,
-  Alert
+  Divider
 } from "antd";
 
 const formItemLayout = {
@@ -49,28 +49,37 @@ const tailFormItemLayout = {
 const Register = () => {
   const { Title } = Typography;
   const [form] = Form.useForm();
-  const [errors, setErrors] = useState({});
+  const [errorStatus, setErrorStatus] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  //get errors from redux store
-  const getErrors = useSelector(state => state.errors);
+  //get errors from backend by redux store
+  let errors = useSelector(state => state.errors);
 
   useEffect(() => {
-    //set errors when errors has been changed from backend
-    setErrors(getErrors);
-  }, [getErrors]);
+    //clean up errors message from backend
+    if (errors) {
+      setErrorStatus(false);
+    }
+  }, []);
 
   const onFinish = registerData => {
-    console.log("Received values of form: ", registerData);
-    //dispatch a action
-    dispatch(registerUser(registerData));
+    //console.log("Received values of form: ", registerData);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setErrorStatus(true);
+      //dispatch a action
+      dispatch(registerUser(registerData, history));
+    }, 500);
   };
 
   //removing error alert from backend when input has been on change
   const onInputChange = (value, type) => {
     if (value) {
-      errors[type] = null;
-      setErrors({ ...errors });
+      setLoading(false);
+      errors[type] = undefined;
     }
   };
 
@@ -106,15 +115,10 @@ const Register = () => {
           }}
           scrollToFirstError
         >
-          {errors.first_name && (
-            <Col span={16} offset={6}>
-              <Alert message={errors.first_name} type="error" showIcon />
-            </Col>
-          )}
-
           <Form.Item
             name="first_name"
             label={<span>First Name&nbsp;</span>}
+            {...validateStatus(errors.first_name, errorStatus)}
             rules={[
               {
                 required: true,
@@ -131,16 +135,13 @@ const Register = () => {
               }
             ]}
           >
-            <Input onChange={value => onInputChange(value, "first_name")} />
+            <Input />
           </Form.Item>
-          {errors.last_name && (
-            <Col span={16} offset={6}>
-              <Alert message={errors.last_name} type="error" showIcon />
-            </Col>
-          )}
+
           <Form.Item
             name="last_name"
             label={<span>Last Name&nbsp;</span>}
+            {...validateStatus(errors.last_name, errorStatus)}
             rules={[
               {
                 required: true,
@@ -160,15 +161,10 @@ const Register = () => {
             <Input onChange={value => onInputChange(value, "last_name")} />
           </Form.Item>
 
-          {errors.email && (
-            <Col span={16} offset={6}>
-              <Alert message={errors.email} type="error" showIcon />
-            </Col>
-          )}
-
           <Form.Item
             name="email"
             label="E-mail"
+            {...validateStatus(errors.email, errorStatus)}
             rules={[
               {
                 type: "email",
@@ -184,14 +180,11 @@ const Register = () => {
               <Input onChange={value => onInputChange(value, "email")} />
             </AutoComplete>
           </Form.Item>
-          {errors.password && (
-            <Col span={16} offset={6}>
-              <Alert message={errors.password} type="error" showIcon />
-            </Col>
-          )}
+
           <Form.Item
             name="password"
             label="Password"
+            {...validateStatus(errors.password, errorStatus)}
             rules={[
               {
                 required: true,
@@ -212,15 +205,12 @@ const Register = () => {
               onChange={value => onInputChange(value, "password")}
             />
           </Form.Item>
-          {errors.confirm_password && (
-            <Col span={16} offset={6}>
-              <Alert message={errors.confirm_password} type="error" showIcon />
-            </Col>
-          )}
+
           <Form.Item
             name="confirm_password"
             label="Confirm Password"
             dependencies={["password"]}
+            {...validateStatus(errors.confirm_password, errorStatus)}
             hasFeedback
             rules={[
               {
@@ -261,7 +251,7 @@ const Register = () => {
             </Checkbox>
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" loading={loading} htmlType="submit">
               Register
             </Button>
           </Form.Item>

@@ -95,9 +95,12 @@ router.post("/login", (req, res) => {
           { expiresIn: 72000 }, //set expired time
           (err, token) => {
             if (err) throw err;
+            //set token in cookie
+            res.cookie("jwt", token, { httpOnly: true });
+            //send signed token to client
             res.send({
               success: true,
-              token: "Bearer " + token,
+              token: token,
               msg: "Logged in successfully"
             });
           }
@@ -122,8 +125,22 @@ router.get(
       first_name: req.user.first_name,
       last_name: req.user.last_name,
       email: req.user.email,
-      avatar: req.user.avatar
+      avatar: req.user.avatar,
+      exp: req.user.exp
     });
+  }
+);
+
+// @route   GET api/users/logout
+// @desc    clear cookie to logout
+// @access  Private
+router.get(
+  "/logout",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //clear token to logout
+    res.clearCookie("jwt");
+    res.send("deleted cookie successfully");
   }
 );
 

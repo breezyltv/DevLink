@@ -1,7 +1,6 @@
 import axios from "axios";
 import { GET_ERRORS, SET_CURRENT_USER } from "./actionTypes";
 import { setLoading } from "./loadingAction";
-import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
 //register an account
@@ -32,8 +31,8 @@ export const login = userData => dispatch => {
     .post("/api/users/login", userData)
     .then(res => {
       const { token } = res.data;
-      localStorage.setItem("jwtToken", token);
-      setAuthToken(token);
+      //localStorage.setItem("jwtToken", token);
+      //setAuthToken(token);
       //decode token to get user data
       const user = jwt_decode(token);
       //set current user
@@ -59,11 +58,31 @@ export const setCurrentUser = user => {
   };
 };
 
+export const auth = history => dispatch => {
+  axios.get("/api/users/currentUser").then(res => {
+    //console.log("current user", res.data);
+    if (res.data) {
+      //set current user data
+      dispatch(setCurrentUser(res.data));
+      //check if token expired
+      const currentTime = Date.now() / 1000;
+      if (res.data.exp < currentTime) {
+        //logout user
+        dispatch(logout());
+        //redirect to login
+        history.push("/login");
+      }
+    } else {
+      history.push("/login");
+    }
+  });
+};
+
 export const logout = () => dispatch => {
-  //remove token in local storage
-  localStorage.removeItem("jwtToken");
-  //remove token in header
-  setAuthToken(false);
-  // set current user to empty data
-  dispatch(setCurrentUser({}));
+  //call API to remove token in cookie
+  axios.get("api/users/logout").then(res => {
+    console.log(res.data);
+    // set current user to empty data
+    dispatch(setCurrentUser({}));
+  });
 };

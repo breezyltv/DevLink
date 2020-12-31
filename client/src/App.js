@@ -1,5 +1,6 @@
-import React, { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React, { lazy, Suspense, useEffect } from "react";
+import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
+import { auth } from "./actions/authAction";
 import { Provider } from "react-redux";
 import jwt_decode from "jwt-decode";
 import "./App.css";
@@ -42,6 +43,12 @@ if (localStorage.jwtToken) {
 }
 
 function App() {
+  const history = useHistory();
+  //check current user and set current user data
+  useEffect(() => {
+    store.dispatch(auth(history));
+  }, []);
+
   return (
     <Provider store={store}>
       <Router>

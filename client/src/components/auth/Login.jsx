@@ -10,8 +10,7 @@ import {
   Col,
   Divider,
   Typography,
-  AutoComplete,
-  Alert
+  AutoComplete
 } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
@@ -22,33 +21,30 @@ const Login = () => {
   const { Title } = Typography;
 
   const [errorStatus, setErrorStatus] = useState(false);
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
   //get errors from backend by redux store
-  let errors = useSelector(state => state.errors);
+  const errors = useSelector(state => state.errors);
   const auth = useSelector(state => state.auth);
+  const [cleanErrors, setCleanErrors] = useState({});
+  const { loadingStatus } = useSelector(state => state.loading);
   useEffect(() => {
-    //clean up errors message from backend
-    if (errors) {
-      setErrorStatus(false);
-    }
+    setCleanErrors({ ...errors });
+
     //check if user already logged
     if (auth.isAuthenticated) {
       history.push("/dashboard");
+    } else {
+      history.push("/login");
     }
-  }, [auth]);
+  }, [auth, errors]);
 
   const onFinish = userData => {
-    //console.log("Received login values of form: ", userData);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setErrorStatus(true);
-      //dispatch to login
-      dispatch(login(userData));
-    }, 500);
+    //dispatch to login
+    dispatch(login(userData));
+    //set error status to display errors if input is invalid
+    setErrorStatus(true);
   };
 
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
@@ -69,8 +65,9 @@ const Login = () => {
   //removing error alert from backend when input has been on change
   const onInputChange = (value, type) => {
     if (value) {
-      setLoading(false);
-      errors[type] = undefined;
+      //hide error message for antd form
+      cleanErrors[type] = undefined;
+      setCleanErrors({ ...cleanErrors });
     }
   };
 
@@ -92,7 +89,7 @@ const Login = () => {
             name="email"
             hasFeedback
             //for displaying errors from backend
-            {...validateStatus(errors.email, errorStatus)}
+            {...validateStatus(cleanErrors.email, errorStatus)}
             //validateStatus={errors.email && errorStatus ? "error" : ""}
             //help={errorStatus ? errors.email : ""}
             rules={[
@@ -119,7 +116,7 @@ const Login = () => {
             name="password"
             hasFeedback
             //for displaying errors from backend
-            {...validateStatus(errors.password, errorStatus)}
+            {...validateStatus(cleanErrors.password, errorStatus)}
             rules={[
               {
                 required: true,
@@ -147,7 +144,7 @@ const Login = () => {
           <Form.Item>
             <Button
               type="primary"
-              loading={loading}
+              loading={loadingStatus}
               htmlType="submit"
               className="login-form-button"
             >

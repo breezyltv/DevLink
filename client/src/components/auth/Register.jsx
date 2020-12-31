@@ -50,36 +50,33 @@ const Register = () => {
   const { Title } = Typography;
   const [form] = Form.useForm();
   const [errorStatus, setErrorStatus] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [cleanErrors, setCleanErrors] = useState({});
   const dispatch = useDispatch();
   const history = useHistory();
 
   //get errors from backend by redux store
-  let errors = useSelector(state => state.errors);
-
+  const errors = useSelector(state => state.errors);
+  const { loadingStatus } = useSelector(state => state.loading);
   useEffect(() => {
-    //clean up errors message from backend
-    if (errors) {
-      setErrorStatus(false);
-    }
-  }, []);
+    //set errors message from backend
+    setCleanErrors({ ...errors });
+  }, [errors]);
 
   const onFinish = registerData => {
     //console.log("Received values of form: ", registerData);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setErrorStatus(true);
-      //dispatch a action
-      dispatch(registerUser(registerData, history));
-    }, 500);
+
+    //dispatch a action
+    dispatch(registerUser(registerData, history));
+    //set error status to display errors from backend
+    setErrorStatus(true);
   };
 
   //removing error alert from backend when input has been on change
   const onInputChange = (value, type) => {
     if (value) {
-      setLoading(false);
-      errors[type] = undefined;
+      //hide error message for antd form
+      cleanErrors[type] = undefined;
+      setCleanErrors({ ...cleanErrors });
     }
   };
 
@@ -118,7 +115,7 @@ const Register = () => {
           <Form.Item
             name="first_name"
             label={<span>First Name&nbsp;</span>}
-            {...validateStatus(errors.first_name, errorStatus)}
+            {...validateStatus(cleanErrors.first_name, errorStatus)}
             rules={[
               {
                 required: true,
@@ -135,13 +132,13 @@ const Register = () => {
               }
             ]}
           >
-            <Input />
+            <Input onChange={value => onInputChange(value, "first_name")} />
           </Form.Item>
 
           <Form.Item
             name="last_name"
             label={<span>Last Name&nbsp;</span>}
-            {...validateStatus(errors.last_name, errorStatus)}
+            {...validateStatus(cleanErrors.last_name, errorStatus)}
             rules={[
               {
                 required: true,
@@ -164,7 +161,7 @@ const Register = () => {
           <Form.Item
             name="email"
             label="E-mail"
-            {...validateStatus(errors.email, errorStatus)}
+            {...validateStatus(cleanErrors.email, errorStatus)}
             rules={[
               {
                 type: "email",
@@ -184,7 +181,7 @@ const Register = () => {
           <Form.Item
             name="password"
             label="Password"
-            {...validateStatus(errors.password, errorStatus)}
+            {...validateStatus(cleanErrors.password, errorStatus)}
             rules={[
               {
                 required: true,
@@ -210,7 +207,7 @@ const Register = () => {
             name="confirm_password"
             label="Confirm Password"
             dependencies={["password"]}
-            {...validateStatus(errors.confirm_password, errorStatus)}
+            {...validateStatus(cleanErrors.confirm_password, errorStatus)}
             hasFeedback
             rules={[
               {
@@ -251,7 +248,7 @@ const Register = () => {
             </Checkbox>
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
-            <Button type="primary" loading={loading} htmlType="submit">
+            <Button type="primary" loading={loadingStatus} htmlType="submit">
               Register
             </Button>
           </Form.Item>

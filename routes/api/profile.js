@@ -22,14 +22,14 @@ router.get("/handle/:handle", (req, res) => {
     .populate("user", ["first_name", "last_name", "avatar"])
     .then(profile => {
       if (!profile) {
-        errors.noprofile = "There is no profile for this handle";
+        errors.noProfile = "There is no profile for this handle";
         return res.status(404).send(errors);
       }
       res.send(profile);
     })
     .catch(err =>
       res.status(404).send({
-        noprofile: "There is no profile for this handle"
+        noProfile: "There is no profile for this handle"
       })
     );
 });
@@ -43,14 +43,14 @@ router.get("/user/:uid", (req, res) => {
     .populate("user", ["first_name", "last_name", "avatar"])
     .then(profile => {
       if (!profile) {
-        errors.noprofile = "There is no profile for this user id";
+        errors.noProfile = "There is no profile for this user id";
         return res.status(404).send(errors);
       }
       res.send(profile);
     })
     .catch(err =>
       res.status(404).send({
-        noprofile: "There is no profile for this user id: " + req.params.uid
+        noProfile: "There is no profile for this user id: " + req.params.uid
       })
     );
 });
@@ -64,14 +64,14 @@ router.get("/all", (req, res) => {
     .populate("user", ["first_name", "last_name", "avatar"])
     .then(profile => {
       if (!profile) {
-        errors.noprofile = "There is no profiles";
+        errors.noProfile = "There is no profiles";
         return res.status(404).send(errors);
       }
       res.send(profile);
     })
     .catch(err =>
       res.status(404).send({
-        noprofile: "There is no profiles"
+        noProfile: "There is no profiles"
       })
     );
 });
@@ -88,7 +88,7 @@ router.get(
       .populate("user", ["first_name", "last_name", "avatar"])
       .then(profile => {
         if (!profile) {
-          errors.noprofile = "there is no profile for this user";
+          errors.noProfile = "there is no profile for this user";
           return res.status(400).send(errors);
         }
         res.send(profile);

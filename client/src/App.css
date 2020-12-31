@@ -44,6 +44,12 @@
   margin-bottom: 5px;
 }
 
+.lazyContent {
+  text-align: center;
+  width: 100%;
+  margin: 100px 0;
+}
+
 .menuBar {
   padding: 0 20px;
   border-bottom: solid 1px #e8e8e8;
@@ -55,19 +61,26 @@
   background-color: #fff;
 }
 
-.logo {
-  float: left;
+.menuBar .logo {
+  display: inline-block;
   margin-right: 20px;
-  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-.logo img {
-  width: 75px;
+.menuBar .logo img {
+  width: 60px;
 }
 
-.logo a {
-  display: inline-block;
+.menuBar .logo a {
   font-size: 20px;
   text-transform: capitalize;
+}
+
+.menuBar .logo .title {
+  font-size: 12pt;
+  font-weight: bold;
+  color: #282c34;
+  margin-left: 5px;
 }
 
 .menuCon {

@@ -1,51 +1,38 @@
 import React, { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  useHistory,
+  Switch
+} from "react-router-dom";
 import { auth } from "./actions/authAction";
 import { Provider } from "react-redux";
-import jwt_decode from "jwt-decode";
 import "./App.css";
 
-import { logout, setCurrentUser } from "./actions/authAction";
 import store from "./store/store";
 
+import PrivateRoute from "./components/auth/PrivateRoute";
 import HeaderLayout from "./components/layouts/Header";
 import FooterLayout from "./components/layouts/Footer";
 import { Layout, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import setAuthToken from "./utils/setAuthToken";
 //import Home from "./components/layouts/Home";
 const Home = lazy(() => import("./components/layouts/Home"));
 //import Register from "./components/auth/Register";
 const Register = lazy(() => import("./components/auth/Register"));
 //import Login from "./components/auth/Login";
 const Login = lazy(() => import("./components/auth/Login"));
+const Dashboard = lazy(() => import("./components/dashboard/Dashboard"));
 
 const spinIcon = <LoadingOutlined style={{ fontSize: 30 }} spin />;
 
 const { Content } = Layout;
 
-//check if token is available and set it
-if (localStorage.jwtToken) {
-  //set auth token header
-  setAuthToken(localStorage.jwtToken);
-  //decode to get current use data
-  const currentUser = jwt_decode(localStorage.jwtToken);
-  //set current user
-  store.dispatch(setCurrentUser(currentUser));
-  //check if token expired
-  const currentTime = Date.now() / 1000;
-  if (currentUser.exp < currentTime) {
-    //logout user
-    store.dispatch(logout());
-    //redirect to login
-    window.location.href = "/login";
-  }
-}
-
 function App() {
   const history = useHistory();
   //check current user and set current user data
   useEffect(() => {
+    document.title = "DevLink";
     store.dispatch(auth(history));
   }, []);
 
@@ -67,6 +54,9 @@ function App() {
               <Route exact path="/" component={Home} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
             </Suspense>
           </Content>
           <FooterLayout />

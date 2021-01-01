@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { validateStatus, domains } from "../../utils/util";
-import { registerUser } from "../../actions/authAction";
+import { registerUser, clearErrors } from "../../actions/authAction";
 import {
   Form,
   Input,
@@ -57,6 +57,12 @@ const Register = () => {
   //get errors from backend by redux store
   const errors = useSelector(state => state.errors);
   const { loadingStatus } = useSelector(state => state.loading);
+
+  //clear errors from redux store
+  useEffect(() => {
+    dispatch(clearErrors());
+  }, []);
+
   useEffect(() => {
     //set errors message from backend
     setCleanErrors({ ...errors });

@@ -10,12 +10,13 @@ import {
   Col,
   Divider,
   Typography,
-  AutoComplete
+  AutoComplete,
+  Alert
 } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import { validateStatus, domains } from "../../utils/util";
-import { login } from "../../actions/authAction";
+import { login, clearErrors } from "../../actions/authAction";
 
 const Login = () => {
   const { Title } = Typography;
@@ -28,10 +29,16 @@ const Login = () => {
   const errors = useSelector(state => state.errors);
   const auth = useSelector(state => state.auth);
   const [cleanErrors, setCleanErrors] = useState({});
+  //get loading status
   const { loadingStatus } = useSelector(state => state.loading);
+
+  //clear errors from redux store
+  useEffect(() => {
+    dispatch(clearErrors());
+  }, []);
+
   useEffect(() => {
     setCleanErrors({ ...errors });
-
     //check if user already logged
     if (auth.isAuthenticated) {
       history.push("/dashboard");
@@ -68,6 +75,9 @@ const Login = () => {
       //hide error message for antd form
       cleanErrors[type] = undefined;
       setCleanErrors({ ...cleanErrors });
+      if (errors.loginFailed) {
+        errors.loginFailed = undefined;
+      }
     }
   };
 
@@ -131,6 +141,11 @@ const Login = () => {
               onChange={value => onInputChange(value, "password")}
             />
           </Form.Item>
+
+          {errors.loginFailed && (
+            <Alert message={errors.loginFailed} type="error" showIcon />
+          )}
+
           <Form.Item>
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>Remember me</Checkbox>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, SET_CURRENT_USER } from "./actionTypes";
+import { GET_ERRORS, SET_CURRENT_USER, CLEAR_ERRORS } from "./actionTypes";
 import { setLoading } from "./loadingAction";
 import jwt_decode from "jwt-decode";
 
@@ -13,12 +13,11 @@ export const registerUser = (registerData, history) => dispatch => {
       history.push("/login");
     })
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
-
       setTimeout(() => {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err.response.data
+        });
         dispatch(setLoading(false));
       }, 300);
     });
@@ -31,8 +30,6 @@ export const login = userData => dispatch => {
     .post("/api/users/login", userData)
     .then(res => {
       const { token } = res.data;
-      //localStorage.setItem("jwtToken", token);
-      //setAuthToken(token);
       //decode token to get user data
       const user = jwt_decode(token);
       //set current user
@@ -40,12 +37,14 @@ export const login = userData => dispatch => {
       dispatch(setLoading(false));
     })
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
       setTimeout(() => {
+        //set loading
         dispatch(setLoading(false));
+        //send data to reducer
+        dispatch({
+          type: GET_ERRORS,
+          payload: err.response.data
+        });
       }, 300);
     });
 };
@@ -68,7 +67,7 @@ export const auth = history => dispatch => {
       const currentTime = Date.now() / 1000;
       if (res.data.exp < currentTime) {
         //logout user
-        dispatch(logout());
+        logout();
         //redirect to login
         history.push("/login");
       }
@@ -82,7 +81,15 @@ export const logout = () => dispatch => {
   //call API to remove token in cookie
   axios.get("api/users/logout").then(res => {
     console.log(res.data);
+    dispatch(setLoading(false));
     // set current user to empty data
     dispatch(setCurrentUser({}));
+  });
+};
+
+export const clearErrors = () => dispatch => {
+  //call API to remove token in cookie
+  dispatch({
+    type: CLEAR_ERRORS
   });
 };

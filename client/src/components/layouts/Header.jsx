@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
-import { Layout, Button, Drawer } from "antd";
+import { Button, Drawer } from "antd";
 import logo from "../../img/looper.png";
 
 const HeaderLayout = () => {
@@ -10,9 +11,10 @@ const HeaderLayout = () => {
   return (
     <nav className="menuBar">
       <div className="logo">
-        <a href="">
+        <Link to="/">
           <img src={logo}></img>
-        </a>
+          <span className="title">DevLink</span>
+        </Link>
       </div>
       <div className="menuCon">
         <div className="leftMenu">

@@ -2,6 +2,7 @@ const express = require("express");
 const connectDB = require("../config/db_config");
 const cors = require("cors");
 const passport = require("passport");
+const cookieParser = require("cookie-parser");
 const profile = require("../routes/api/profile");
 const users = require("../routes/api/users");
 const posts = require("../routes/api/posts");
@@ -15,6 +16,9 @@ app.use(
   })
 );
 
+//cookie parser middleware
+app.use(cookieParser());
+
 // body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -23,7 +27,7 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 require("../config/passport")(passport);
 
-//connect to mongoDB Allas
+//connect to mongoDB Atlas
 connectDB();
 
 //app.get("/", (req, res) => res.send("hello node server..."));

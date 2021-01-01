@@ -42,10 +42,19 @@
   padding-top: 5px;
   padding-bottom: 5px;
   margin-bottom: 5px;
+  font-size: 10pt;
+  background-color: #f89898;
+  border-color: #e55039;
+}
+
+.lazyContent {
+  text-align: center;
+  width: 100%;
+  margin: 100px 0;
 }
 
 .menuBar {
-  padding: 0 20px;
+  padding: 0 55px;
   border-bottom: solid 1px #e8e8e8;
   overflow: auto;
   box-shadow: 0 0 30px #f3f1f1;
@@ -55,19 +64,26 @@
   background-color: #fff;
 }
 
-.logo {
-  float: left;
+.menuBar .logo {
+  display: inline-block;
   margin-right: 20px;
-  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-.logo img {
-  width: 75px;
+.menuBar .logo img {
+  width: 60px;
 }
 
-.logo a {
-  display: inline-block;
+.menuBar .logo a {
   font-size: 20px;
   text-transform: capitalize;
+}
+
+.menuBar .logo .title {
+  font-size: 12pt;
+  font-weight: bold;
+  color: #282c34;
+  margin-left: 5px;
 }
 
 .menuCon {
@@ -76,7 +92,7 @@
 }
 
 .menuCon .ant-menu-item {
-  padding: 0px 5px;
+  margin: 0 10px !important;
 }
 
 .menuCon .ant-menu-submenu-title {

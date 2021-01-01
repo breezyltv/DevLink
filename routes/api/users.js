@@ -65,6 +65,9 @@ router.post("/register", (req, res) => {
 // @desc    Login a user and return JSON Web Token
 // @access  Public
 router.post("/login", (req, res) => {
+  const loginFailed =
+    "The email and password you entered did not match our records!" +
+    " Please double-check and try again.";
   const { errors, isValid } = validateLoginInput(req.body);
   //check validation
   if (!isValid) {
@@ -75,7 +78,7 @@ router.post("/login", (req, res) => {
   //check user by email in model
   User.findOne({ email }).then(user => {
     if (!user) {
-      errors.email = "User does not exist!";
+      errors.loginFailed = loginFailed;
       return res.status(400).send(errors);
     }
     //check password if it's match
@@ -86,24 +89,28 @@ router.post("/login", (req, res) => {
           uid: user.id,
           first_name: user.first_name,
           last_name: user.last_name,
-          avatar: user.avatar
+          avatar: user.avatar,
+          role: user.role
         };
         //sign a token for user
         jwt.sign(
           payload,
-          keys.secretOrKey,
-          { expiresIn: 72000 }, //set expired time
+          keys.secretOrKey, // set secret key
+          { expiresIn: keys.expiredTime }, //set expired time
           (err, token) => {
             if (err) throw err;
+            //set token in cookie
+            res.cookie("jwt", token, { httpOnly: true });
+            //send signed token to client
             res.send({
               success: true,
-              token: "Bearer " + token,
+              token: token,
               msg: "Logged in successfully"
             });
           }
         );
       } else {
-        errors.password = "Password is incorrect!";
+        errors.loginFailed = loginFailed;
         return res.status(400).send(errors);
       }
     });
@@ -117,12 +124,41 @@ router.get(
   "/currentUser",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    //check if token expired
+    const currentTime = Date.now() / 1000;
+    if (req.user.exp < currentTime) {
+      //delete cookie to logout user
+      res.clearCookie("jwt");
+      res.send({
+        msg: "The token of this login URL has expired!",
+        isLoggedOut: true
+      });
+    } else {
+      res.send({
+        uid: req.user._id,
+        role: req.user.role,
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email,
+        avatar: req.user.avatar,
+        exp: req.user.exp
+      });
+    }
+  }
+);
+
+// @route   GET api/users/logout
+// @desc    clear cookie to logout
+// @access  Private
+router.get(
+  "/logout",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //clear token to logout
+    res.clearCookie("jwt");
     res.send({
-      uid: req.user._id,
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      email: req.user.email,
-      avatar: req.user.avatar
+      msg: "Token has been removed to logout successfully",
+      isLoggedOut: true
     });
   }
 );

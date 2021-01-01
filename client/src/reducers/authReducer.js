@@ -1,16 +1,21 @@
-import { SET_CURRENT_USER } from "../actions/actionTypes";
+import {
+  SET_CURRENT_USER,
+  CLEAR_CURRENT_PROFILE
+} from "../actions/actionTypes";
 import isEmpty from "../utils/isEmpty_valid";
 const initialState = {
   isAuthenticated: false,
+  admin: false,
   user: {}
 };
 
-const autReducer = (state = initialState, action) => {
+const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_CURRENT_USER:
       return {
         ...state,
         isAuthenticated: !isEmpty(action.payload),
+        admin: action.payload.role === "admin" ? true : false,
         user: action.payload
       };
     default:
@@ -18,4 +23,4 @@ const autReducer = (state = initialState, action) => {
   }
 };
 
-export default autReducer;
+export default authReducer;

@@ -4,7 +4,7 @@ import {
 } from "../actions/actionTypes";
 import isEmpty from "../utils/isEmpty_valid";
 const initialState = {
-  isAuthenticated: null,
+  isAuthenticated: false,
   admin: false,
   user: {}
 };

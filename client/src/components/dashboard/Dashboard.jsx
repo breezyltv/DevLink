@@ -8,11 +8,12 @@ const { Title, Paragraph, Text } = Typography;
 
 const Dashboard = () => {
   //const { isAuthenticated, user } = useSelector(state => state.auth);
-  const { profile } = useSelector(state => state.profile);
+
   const { loadingStatus } = useSelector(state => state.loading);
   const history = useHistory();
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const { profile } = useSelector(state => state.profile);
   useEffect(() => {
     dispatch(getCurrentProfile());
   }, []);

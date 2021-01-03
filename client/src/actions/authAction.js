@@ -57,10 +57,10 @@ export const setCurrentUser = user => {
   };
 };
 
-export const auth = history => dispatch => {
+export const auth = () => dispatch => {
   axios.get("/api/users/currentUser").then(res => {
     //console.log("current user", res.data);
-    if (res.data) {
+    if (!res.data.isLoggedOut || res.data.isLoggedOut === undefined) {
       //console.log("call auth", res.data);
 
       //set current user data
@@ -74,7 +74,7 @@ export const auth = history => dispatch => {
       //   history.push("/login");
       // }
     } else {
-      history.push("/login");
+      window.location.href = "/login";
     }
   });
 };

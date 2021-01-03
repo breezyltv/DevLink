@@ -60,7 +60,7 @@ const RightMenu = () => {
         {fullName}
       </Menu.Item>
       <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-        <Link onClick={logoutUser}>Dashboard</Link>
+        <Link to="/dashboard">Dashboard</Link>
       </Menu.Item>
       <Dropdown overlay={settingDropMenu} trigger={["click"]}>
         <Button icon={<SettingOutlined />} onClick={e => e.preventDefault()}>

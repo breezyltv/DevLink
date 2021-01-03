@@ -2,8 +2,8 @@ import React, { lazy, Suspense, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
-  useHistory,
-  Switch
+  Switch,
+  Redirect
 } from "react-router-dom";
 import { auth } from "./actions/authAction";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,13 +30,14 @@ const spinIcon = <LoadingOutlined style={{ fontSize: 30 }} spin />;
 const { Content } = Layout;
 
 function App() {
-  const history = useHistory();
+  //const history = useHistory();
   const { isAuthenticated } = useSelector(state => state.auth);
   const dispatch = useDispatch();
+
   //check current user and set current user data
   useEffect(() => {
     document.title = "DevLink";
-    dispatch(auth(history));
+    dispatch(auth());
   }, []);
 
   return (
@@ -56,18 +57,22 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            <Switch>
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
-            </Switch>
-            <Switch>
-              {isAuthenticated !== null ? (
-                <PrivateRoute
-                  exact
-                  path="/add-profile"
-                  component={AddProfile}
-                />
-              ) : null}
-            </Switch>
+            {isAuthenticated ? (
+              <>
+                <Switch>
+                  <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                </Switch>
+                <Switch>
+                  <PrivateRoute
+                    exact
+                    path="/add-profile"
+                    component={AddProfile}
+                  />
+                </Switch>
+              </>
+            ) : (
+              isAuthenticated && <Redirect to="/login" />
+            )}
           </Suspense>
         </Content>
         <FooterLayout />

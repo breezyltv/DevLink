@@ -4,13 +4,15 @@ import {
   LoginOutlined,
   UserOutlined,
   LogoutOutlined,
-  SettingOutlined
+  SettingOutlined,
+  DashboardOutlined
 } from "@ant-design/icons";
-import { Menu, Avatar, Image } from "antd";
+import { Menu, Avatar, Image, Dropdown, Button } from "antd";
 import { logout } from "../../actions/authAction";
 import { clearCurrentProfile } from "../../actions/profileAction";
 import { useSelector, useDispatch } from "react-redux";
 import { upperFirstChar } from "../../utils/util";
+
 const RightMenu = () => {
   const dispatch = useDispatch();
   //get current user
@@ -33,6 +35,20 @@ const RightMenu = () => {
     dispatch(logout());
   };
 
+  const settingDropMenu = (
+    <Menu>
+      {admin && (
+        <Menu.Item key="management" icon={<UserOutlined />}>
+          <Link onClick={logoutUser}>User Management</Link>
+        </Menu.Item>
+      )}
+      <Menu.Divider />
+      <Menu.Item key="logout" icon={<LogoutOutlined />}>
+        <Link onClick={logoutUser}>Logout</Link>
+      </Menu.Item>
+    </Menu>
+  );
+
   const authMenu = (
     <Menu mode="horizontal">
       <Menu.Item key="account">
@@ -43,16 +59,14 @@ const RightMenu = () => {
         )}{" "}
         {fullName}
       </Menu.Item>
-
-      {admin && (
-        <Menu.Item key="management" icon={<SettingOutlined />}>
-          <Link onClick={logoutUser}>Management</Link>
-        </Menu.Item>
-      )}
-
-      <Menu.Item key="logout" icon={<LogoutOutlined />}>
-        <Link onClick={logoutUser}>Logout</Link>
+      <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+        <Link to="/dashboard">Dashboard</Link>
       </Menu.Item>
+      <Dropdown overlay={settingDropMenu} trigger={["click"]}>
+        <Button icon={<SettingOutlined />} onClick={e => e.preventDefault()}>
+          Setting
+        </Button>
+      </Dropdown>
     </Menu>
   );
 

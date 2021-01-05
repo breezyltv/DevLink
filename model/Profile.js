@@ -24,8 +24,23 @@ const ProfileSchema = new Schema({
     required: true
   },
   skills: {
-    type: [String],
-    required: true
+    frameworks: [
+      {
+        title: { type: String },
+        level: { type: Number }
+      }
+    ],
+    languages: [
+      {
+        title: { type: String },
+        level: { type: Number }
+      }
+    ],
+    tools: [
+      {
+        title: { type: String }
+      }
+    ]
   },
   bio: {
     type: String

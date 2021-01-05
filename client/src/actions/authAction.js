@@ -57,22 +57,24 @@ export const setCurrentUser = user => {
   };
 };
 
-export const auth = history => dispatch => {
+export const auth = () => dispatch => {
   axios.get("/api/users/currentUser").then(res => {
-    //console.log("current user", res.data);
-    if (res.data) {
+    console.log("current user", res.data);
+    if (!res.data.isLoggedOut || res.data.isLoggedOut === undefined) {
+      //console.log("get auth", res.data);
+
       //set current user data
       dispatch(setCurrentUser(res.data));
       //check if token expired
-      const currentTime = Date.now() / 1000;
-      if (res.data.exp < currentTime) {
-        //logout user
-        logout();
-        //redirect to login
-        history.push("/login");
-      }
+      // const currentTime = Date.now() / 1000;
+      // if (res.data.exp < currentTime) {
+      //   //logout user
+      //   logout();
+      //   //redirect to login
+      //   history.push("/login");
+      // }
     } else {
-      history.push("/login");
+      window.location.href = "/login";
     }
   });
 };

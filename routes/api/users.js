@@ -100,7 +100,10 @@ router.post("/login", (req, res) => {
           (err, token) => {
             if (err) throw err;
             //set token in cookie
-            res.cookie("jwt", token, { httpOnly: true });
+            res.cookie("jwt", token, {
+              expires: new Date(Date.now() + keys.expiredTime * 1000),
+              httpOnly: true
+            });
             //send signed token to client
             res.send({
               success: true,

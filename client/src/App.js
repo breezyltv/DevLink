@@ -57,7 +57,7 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <>
                 <Switch>
                   <PrivateRoute exact path="/dashboard" component={Dashboard} />
@@ -70,8 +70,6 @@ function App() {
                   />
                 </Switch>
               </>
-            ) : (
-              isAuthenticated && <Redirect to="/login" />
             )}
           </Suspense>
         </Content>

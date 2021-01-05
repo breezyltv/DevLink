@@ -28,6 +28,7 @@
 - React-redux
 - React-thunk
 - UI: Ant design
+- RxJS: handling dynamic search with debounce.
 
 ## Available Scripts
 

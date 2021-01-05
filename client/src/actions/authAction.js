@@ -59,9 +59,9 @@ export const setCurrentUser = user => {
 
 export const auth = () => dispatch => {
   axios.get("/api/users/currentUser").then(res => {
-    //console.log("current user", res.data);
+    console.log("current user", res.data);
     if (!res.data.isLoggedOut || res.data.isLoggedOut === undefined) {
-      //console.log("call auth", res.data);
+      //console.log("get auth", res.data);
 
       //set current user data
       dispatch(setCurrentUser(res.data));

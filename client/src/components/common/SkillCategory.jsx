@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { Typography, Button, Row, Col, Space, Divider } from "antd";
+import React from "react";
+import { Typography, Button, Row, Col, Space, Divider, Spin } from "antd";
 import DynamicIconComp from "./DynamicIconComp";
-const { Title, Text } = Typography;
+import isEmpty from "../../utils/isEmpty_valid";
+import { LoadingOutlined } from "@ant-design/icons";
+const { Text } = Typography;
 const SkillCategory = props => {
-  const { popFrameworkList, cat, title, showModal } = props;
+  const { popFrameworkList, cat, title, showModal, searchResult } = props;
 
   return (
     <Row>
@@ -13,28 +15,37 @@ const SkillCategory = props => {
         </Typography>
       </Col>
       <Col span={18}>
-        <Space wrap>
-          {popFrameworkList &&
-            popFrameworkList[cat].map((item, idx) => (
-              <>
-                <Button
-                  key={idx}
-                  value={idx}
-                  type={item.status ? "primary" : ""}
-                  icon={
-                    <DynamicIconComp
-                      iconName={item.title}
-                      size={20}
-                      type={cat}
-                    />
-                  }
-                  onClick={e => showModal(e.currentTarget.value, cat)}
-                >
-                  {item.title}
-                </Button>
-              </>
-            ))}
-        </Space>
+        {!searchResult.loading && !searchResult.noResults ? (
+          <Space wrap>
+            {!isEmpty(popFrameworkList) &&
+              popFrameworkList.map((item, idx) => (
+                <>
+                  <Button
+                    key={idx}
+                    value={idx + "-" + item.title}
+                    type={item.status ? "primary" : ""}
+                    icon={
+                      <DynamicIconComp
+                        key={item.title}
+                        iconName={item.title}
+                        size={20}
+                        type={cat}
+                      />
+                    }
+                    onClick={e => showModal(e.currentTarget.value, cat)}
+                  >
+                    {item.title}
+                  </Button>
+                </>
+              ))}
+          </Space>
+        ) : !searchResult.loading && searchResult.noResults ? (
+          <Typography style={{ textAlign: "center" }}>
+            <Text level={4}>No founds... </Text>
+          </Typography>
+        ) : (
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+        )}
         <Divider />
       </Col>
     </Row>

@@ -20,20 +20,23 @@ export const popularFrameworks = [
   "Node.js",
   "Django",
   "Bootstrap",
+  "Antdesign",
+  "MaterialUi",
   "Socket.Io",
   "Ionic",
+  "Flutter",
   "Pytorch",
   "Electron",
   "Tensorflow",
   "Reactivex",
-  "Zendframework",
+
   "Meteor",
   "Wordpress",
   "Codeigniter",
+  "Zendframework",
   "Magento",
   "Sass",
-  "Antdesign",
-  "MaterialUi",
+
   "StyledComponents"
 ];
 

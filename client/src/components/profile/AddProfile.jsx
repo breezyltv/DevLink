@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import {
   Form,
   Input,
@@ -12,15 +12,24 @@ import {
   Typography,
   Divider,
   PageHeader,
-  Select
+  Select,
+  BackTop
 } from "antd";
 import IconSkillItems from "../common/IconSkillList";
 const { Title, Paragraph, Text } = Typography;
 
 const { Option } = Select;
 const AddProfile = () => {
+  const { isAuthenticated } = useSelector(state => state.auth);
   const history = useHistory();
-  const [selectedFrameworks, setSelectedFrameworks] = useState([]);
+  const popFrameworkList = useState({});
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      history.push("/login");
+    }
+  }, [isAuthenticated]);
+
   const layout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 18 }
@@ -46,6 +55,7 @@ const AddProfile = () => {
 
   return (
     <Row>
+      <BackTop />
       <Col span={16} offset={4}>
         <PageHeader
           className="site-page-header"
@@ -120,14 +130,18 @@ const AddProfile = () => {
             <Input />
           </Form.Item>
 
-          <IconSkillItems setSelectedFrameworks={setSelectedFrameworks} />
+          <IconSkillItems popSkills={popFrameworkList} />
 
           <Form.Item name={["resume", "introduction"]} label="Introduction">
             <Input.TextArea />
           </Form.Item>
 
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
-            <Button type="primary" htmlType="submit">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => console.log(popFrameworkList[0])}
+            >
               Submit
             </Button>
           </Form.Item>

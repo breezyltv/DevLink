@@ -72,7 +72,8 @@ import {
   Expo,
   Ionic,
   Jest,
-  Visualstudiocode
+  Visualstudiocode,
+  Flutter
 } from "@styled-icons/simple-icons";
 
 const popularFrameworks = {
@@ -90,7 +91,8 @@ const popularFrameworks = {
   Antdesign: Antdesign,
   MaterialUi: MaterialUi,
   StyledComponents: StyledComponents,
-  Zendframework: Zendframework,
+
+  Flutter: Flutter,
   Reactivex: Reactivex,
   Electron: Electron,
   "Socket.Io": SocketDotIo,
@@ -98,6 +100,7 @@ const popularFrameworks = {
   Pytorch: Pytorch,
   Tensorflow: Tensorflow,
   Wordpress: Wordpress,
+  Zendframework: Zendframework,
   Meteor: Meteor,
   Codeigniter: Codeigniter,
   Magento: Magento

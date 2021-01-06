@@ -31,7 +31,7 @@ const { Content } = Layout;
 
 function App() {
   //const history = useHistory();
-  const { isAuthenticated } = useSelector(state => state.auth);
+  const { isAuthenticated, isLogout } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   //check current user and set current user data
@@ -57,20 +57,29 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            {isAuthenticated && (
+
+            {isAuthenticated ? (
               <>
                 <Switch>
-                  <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                  <PrivateRoute
+                    exact
+                    path="/dashboard"
+                    component={Dashboard}
+                    isAuthenticated={isAuthenticated}
+                  />
                 </Switch>
                 <Switch>
                   <PrivateRoute
                     exact
                     path="/add-profile"
                     component={AddProfile}
+                    isAuthenticated={isAuthenticated}
                   />
                 </Switch>
               </>
-            )}
+            ) : !isAuthenticated && isLogout ? (
+              <Redirect to="/login" />
+            ) : null}
           </Suspense>
         </Content>
         <FooterLayout />

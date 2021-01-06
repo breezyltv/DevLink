@@ -13,22 +13,30 @@ import {
   Divider,
   PageHeader,
   Select,
-  BackTop
+  BackTop,
+  Tag,
+  Space
 } from "antd";
+import {
+  PlusCircleOutlined,
+  CloseCircleOutlined,
+  TwitterOutlined,
+  FacebookOutlined,
+  LinkedinOutlined,
+  InstagramOutlined,
+  YoutubeOutlined
+} from "@ant-design/icons";
 import IconSkillItems from "../common/IconSkillList";
 const { Title, Paragraph, Text } = Typography;
 
 const { Option } = Select;
 const AddProfile = () => {
-  const { isAuthenticated } = useSelector(state => state.auth);
   const history = useHistory();
   const popFrameworkList = useState({});
+  const errors = useSelector(state => state.errors);
+  const [showSocialOption, setShowSocialOption] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      history.push("/login");
-    }
-  }, [isAuthenticated]);
+  useEffect(() => {}, []);
 
   const layout = {
     labelCol: { span: 4 },
@@ -53,6 +61,14 @@ const AddProfile = () => {
     "Other"
   ];
 
+  const handleSubmitProfile = value => {
+    console.log("form value", value);
+
+    console.log("get frameworks: ", getSkills(popFrameworkList[0].frameworks));
+  };
+
+  const getSkills = skills => skills.filter(skill => skill.status === true);
+
   return (
     <Row>
       <BackTop />
@@ -75,7 +91,7 @@ const AddProfile = () => {
         <Form
           {...layout}
           name="nest-messages"
-          onFinish={() => {}}
+          onFinish={handleSubmitProfile}
           validateMessages={validateMessages}
         >
           <Form.Item
@@ -123,25 +139,94 @@ const AddProfile = () => {
             <Input />
           </Form.Item>
           <Form.Item
+            name={["resume", "github"]}
+            label="Your Github"
+            extra="Show your repos"
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
             name={["resume", "city"]}
             label="City"
             extra="City & State suggested (Ex. San Diego, CA) "
           >
             <Input />
           </Form.Item>
-
-          <IconSkillItems popSkills={popFrameworkList} />
-
           <Form.Item name={["resume", "introduction"]} label="Introduction">
-            <Input.TextArea />
+            <Input.TextArea
+              placeholder="Bio..."
+              extra="Tell us about yourself"
+            />
           </Form.Item>
+          <Divider orientation="left">
+            <Title level={4}>Skills:</Title>
+          </Divider>
+          <IconSkillItems popSkills={popFrameworkList} />
+          <Row>
+            <Col offset={4}>
+              <Space>
+                {!showSocialOption ? (
+                  <Button
+                    type="primary"
+                    htmlType="showSkills"
+                    icon={<PlusCircleOutlined />}
+                    onClick={() => setShowSocialOption(true)}
+                  >
+                    Add Socials Link
+                  </Button>
+                ) : (
+                  <Button
+                    type="primary"
+                    htmlType="showSkills"
+                    icon={<CloseCircleOutlined />}
+                    onClick={() => setShowSocialOption(false)}
+                  >
+                    Clear Socials Link
+                  </Button>
+                )}
+
+                <Tag>Option</Tag>
+              </Space>
+              <Divider />
+            </Col>
+          </Row>
+          {showSocialOption && (
+            <Col offset={4}>
+              <Form.Item name={["resume", "twitter"]}>
+                <Input
+                  placeholder="Twitter profile URL"
+                  prefix={<TwitterOutlined />}
+                />
+              </Form.Item>
+              <Form.Item name={["resume", "facebook"]}>
+                <Input
+                  placeholder="facebook profile URL"
+                  prefix={<FacebookOutlined />}
+                />
+              </Form.Item>
+              <Form.Item name={["resume", "linkedin"]}>
+                <Input
+                  placeholder="Linkedin profile URL"
+                  prefix={<LinkedinOutlined />}
+                />
+              </Form.Item>
+              <Form.Item name={["resume", "instagram"]}>
+                <Input
+                  placeholder="Instagram profile URL"
+                  prefix={<InstagramOutlined />}
+                />
+              </Form.Item>
+              <Form.Item name={["resume", "Youtube"]}>
+                <Input
+                  placeholder="Youtube profile URL"
+                  prefix={<TwitterOutlined />}
+                />
+              </Form.Item>
+            </Col>
+          )}
 
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
-            <Button
-              type="primary"
-              htmlType="submit"
-              onClick={() => console.log(popFrameworkList[0])}
-            >
+            <Button type="primary" htmlType="submit" block>
               Submit
             </Button>
           </Form.Item>

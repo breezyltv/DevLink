@@ -28,6 +28,24 @@ export const getCurrentProfile = () => async dispatch => {
   }
 };
 
+// post to add a profile
+export const addProfile = (profileData, history) => async dispatch => {
+  try {
+    dispatch(setLoading(true));
+    const res = await axios.post("/api/profile", profileData);
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    });
+    dispatch(setLoading(false));
+  } catch (error) {}
+  dispatch(setLoading(false));
+  dispatch({
+    type: GET_PROFILE,
+    payload: {}
+  });
+};
+
 export const clearCurrentProfile = () => {
   //remove current profile
   return {

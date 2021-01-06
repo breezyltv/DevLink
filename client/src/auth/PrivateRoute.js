@@ -2,9 +2,11 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
-  // get authentication
-  const { isAuthenticated } = useSelector(state => state.auth);
+const PrivateRoute = ({
+  component: RouteComponent,
+  isAuthenticated,
+  ...rest
+}) => {
   return (
     <Route
       {...rest}

@@ -1,6 +1,11 @@
 import axios from "axios";
-import { GET_ERRORS, SET_CURRENT_USER, CLEAR_ERRORS } from "./actionTypes";
-import { setLoading } from "./loadingAction";
+import {
+  GET_ERRORS,
+  SET_CURRENT_USER,
+  CLEAR_ERRORS,
+  REQUEST_LOADING_AUTH
+} from "./actionTypes";
+import { setLoading, setLoadingAuth } from "./loadingAction";
 import jwt_decode from "jwt-decode";
 
 //register an account
@@ -32,14 +37,18 @@ export const login = userData => dispatch => {
       const { token } = res.data;
       //decode token to get user data
       const user = jwt_decode(token);
+
       //set current user
       dispatch(setCurrentUser(user));
       dispatch(setLoading(false));
     })
     .catch(err => {
+      console.log("login err", err);
+
       setTimeout(() => {
         //set loading
         dispatch(setLoading(false));
+
         //send data to reducer
         dispatch({
           type: GET_ERRORS,
@@ -58,32 +67,39 @@ export const setCurrentUser = user => {
 };
 
 export const auth = () => dispatch => {
-  axios.get("/api/users/currentUser").then(res => {
-    console.log("current user", res.data);
-    if (!res.data.isLoggedOut || res.data.isLoggedOut === undefined) {
-      //console.log("get auth", res.data);
-
-      //set current user data
-      dispatch(setCurrentUser(res.data));
-      //check if token expired
-      // const currentTime = Date.now() / 1000;
-      // if (res.data.exp < currentTime) {
-      //   //logout user
-      //   logout();
-      //   //redirect to login
-      //   history.push("/login");
-      // }
-    } else {
-      window.location.href = "/login";
-    }
-  });
+  //dispatch(setLoadingAuth(true));
+  axios
+    .get("/api/users/currentUser")
+    .then(res => {
+      console.log("current user", res.data);
+      if (!res.data.isLoggedOut || res.data.isLoggedOut === undefined) {
+        //set current user data
+        dispatch(setLoadingAuth(false));
+        dispatch(setCurrentUser(res.data));
+      } else {
+        dispatch(setLoadingAuth(false));
+        window.location.href = "/login";
+      }
+    })
+    .catch(err => {
+      //console.log("check auth err", err);
+      dispatch(setLoadingAuth(false));
+      dispatch(setCurrentUser({}));
+    });
 };
 
-export const logout = () => dispatch => {
+// export const setLoadingAuth = () => {
+//   return {
+//     type: REQUEST_LOADING_AUTH
+//   };
+// };
+
+export const logout = history => dispatch => {
   //call API to remove token in cookie
   axios.get("api/users/logout").then(res => {
     console.log(res.data);
     dispatch(setLoading(false));
+
     // set current user to empty data
     dispatch(setCurrentUser({}));
   });

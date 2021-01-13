@@ -55,6 +55,30 @@ router.get("/user/:uid", (req, res) => {
     );
 });
 
+// @route   GET api/profile/aboutMe
+// @desc    get profile own by admin
+// @access  public
+router.get("/aboutMe", (req, res) => {
+  const errors = {};
+  Profile.find()
+    .populate("user", ["first_name", "last_name", "avatar", "role", "email"], {
+      role: "admin"
+    })
+    .then(profile => {
+      if (!profile) {
+        errors.noProfile = "There is no profile for this admin";
+        return res.status(404).send(errors);
+      }
+      res.send(profile[0]);
+    })
+    .catch(err =>
+      res.status(404).send({
+        noProfile: "There is no profile ",
+        error: err
+      })
+    );
+});
+
 // @route   GET api/profile/all
 // @desc    get all profiles
 // @access  public
@@ -104,6 +128,9 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    //console.log("user id", req.user._id);
+
+    //console.log(req.body);
     const { errors, isValid } = validateProfileInput(req.body);
     //check validation
     if (!isValid) {
@@ -121,12 +148,17 @@ router.post(
     if (req.body.location) profileData.location = req.body.location;
     if (req.body.bio) profileData.bio = req.body.bio;
     if (req.body.status) profileData.status = req.body.status;
-    if (req.body.githubusername)
-      profileData.githubusername = req.body.githubusername;
+    if (req.body.github) profileData.github = req.body.github;
 
     //skills - split into an array
-    if (typeof req.body.skills !== "undefined") {
-      profileData.skills = req.body.skills.split(",");
+    profileData.skills = {};
+    if (typeof req.body.skills !== undefined) {
+      if (req.body.skills.frameworks)
+        profileData.skills.frameworks = req.body.skills.frameworks;
+      if (req.body.skills.languages)
+        profileData.skills.languages = req.body.skills.languages;
+      if (req.body.skills.tools)
+        profileData.skills.tools = req.body.skills.tools;
     }
 
     //social

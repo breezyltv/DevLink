@@ -27,25 +27,30 @@ const ProfileSchema = new Schema({
     frameworks: [
       {
         title: { type: String },
-        level: { type: Number }
+        level: { type: Number },
+        status: { type: Boolean }
       }
     ],
     languages: [
       {
         title: { type: String },
-        level: { type: Number }
+        level: { type: Number },
+        status: { type: Boolean }
       }
     ],
+
     tools: [
       {
-        title: { type: String }
+        title: { type: String },
+        level: { type: Number },
+        status: { type: Boolean }
       }
     ]
   },
   bio: {
     type: String
   },
-  githubusername: {
+  github: {
     type: String
   },
   project: [

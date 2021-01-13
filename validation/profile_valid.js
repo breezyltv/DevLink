@@ -20,10 +20,14 @@ module.exports = validateProfileInput = data => {
   if (validator.isEmpty(data.status)) {
     errors.status = "Status is required";
   }
-  if (validator.isEmpty(data.skills)) {
-    errors.skills = "skills field is required";
+  // if (validator.isEmpty(data.skills)) {
+  //   errors.skills = "skills field is required";
+  // }
+  if (!isEmpty(data.github)) {
+    if (!validator.isURL(data.github)) {
+      errors.github = "The url is invalid";
+    }
   }
-
   if (!isEmpty(data.website)) {
     if (!validator.isURL(data.website)) {
       errors.website = "The url is invalid";

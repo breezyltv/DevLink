@@ -41,7 +41,7 @@ const SkillCategory = props => {
           </Space>
         ) : !searchResult.loading && searchResult.noResults ? (
           <Typography style={{ textAlign: "center" }}>
-            <Text level={4}>No founds... </Text>
+            <Text level={4}>No result found... </Text>
           </Typography>
         ) : (
           <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />

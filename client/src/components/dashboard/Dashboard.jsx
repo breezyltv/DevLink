@@ -1,14 +1,28 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { getCurrentProfile } from "../../actions/profileAction";
-import { Typography, Divider, Button, Row, Col } from "antd";
-import { PlusCircleOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import { Typography, Divider, Button, Row, Col, Space } from "antd";
+import { upperFirstChar } from "../../utils/util";
+import {
+  PlusCircleOutlined,
+  PlusSquareOutlined,
+  ProfileOutlined,
+  InfoCircleOutlined
+} from "@ant-design/icons";
+import { Education } from "@styled-icons/zondicons";
 const { Title, Paragraph, Text } = Typography;
 
 const Dashboard = () => {
-  //const { isAuthenticated, user } = useSelector(state => state.auth);
+  //get current user
+  const { isAuthenticated, user } = useSelector(state => state.auth);
 
+  let fullName = "";
+
+  if (isAuthenticated) {
+    fullName =
+      upperFirstChar(user.first_name) + " " + upperFirstChar(user.last_name);
+  }
   const { loadingStatus } = useSelector(state => state.loading);
   const history = useHistory();
 
@@ -28,13 +42,28 @@ const Dashboard = () => {
       console.log("display data");
       //dashboardContent = profile;
       dashboardContent = (
-        <Button
-          type="primary"
-          onClick={() => history.push("/add-profile")}
-          icon={<PlusSquareOutlined />}
-        >
-          Add Resume
-        </Button>
+        <>
+          <Row>
+            <Title level={4}>
+              Welcome, <Link>{fullName}</Link>
+            </Title>
+          </Row>
+
+          <Row>
+            <Space>
+              <Button
+                type="primary"
+                onClick={() => history.push("/add-profile")}
+                icon={<PlusSquareOutlined />}
+              >
+                Add Resume
+              </Button>
+              <Button icon={<ProfileOutlined />}>Edit Profile</Button>
+              <Button icon={<InfoCircleOutlined />}>Add Experience</Button>
+              <Button icon={<Education size={12} />}>Add Education</Button>
+            </Space>
+          </Row>
+        </>
       );
     } else {
       dashboardContent = (
@@ -44,11 +73,15 @@ const Dashboard = () => {
             <Title level={2}>OOP!</Title>
             <Paragraph>
               <Text strong>
-                You have not yet set up any resume. Please make some resumes!
+                You have not created any resume yet. Please make some resumes!
               </Text>
             </Paragraph>
           </Typography>
-          <Button type="primary" icon={<PlusCircleOutlined />}>
+          <Button
+            type="primary"
+            onClick={() => history.push("/add-profile")}
+            icon={<PlusCircleOutlined />}
+          >
             Add Resume
           </Button>
           <Divider />
@@ -61,7 +94,7 @@ const Dashboard = () => {
     <Row>
       <Col span={20} offset={2}>
         <Divider>
-          <Title level={2}>Wellcome to Dashboard!</Title>
+          <Title level={2}>Dashboard</Title>
         </Divider>
         <div className="site-layout-content">{dashboardContent}</div>
       </Col>

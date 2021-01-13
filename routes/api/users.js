@@ -41,7 +41,7 @@ router.post("/register", (req, res) => {
         last_name: req.body.last_name,
         email: req.body.email,
         password: req.body.password,
-        avatar: avatar
+        avatar: "https:" + avatar
       });
 
       //encrypt password by using bcryptjs

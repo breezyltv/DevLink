@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, Redirect } from "react-router-dom";
+import { validateStatus } from "../../utils/util";
+import { addProfile, clearErrors } from "../../actions/profileAction";
 import {
   Form,
   Input,
-  Checkbox,
   Button,
-  AutoComplete,
   Row,
   Col,
   Typography,
@@ -30,13 +30,26 @@ import IconSkillItems from "../common/IconSkillList";
 const { Title, Paragraph, Text } = Typography;
 
 const { Option } = Select;
+
 const AddProfile = () => {
   const history = useHistory();
   const popFrameworkList = useState({});
   const errors = useSelector(state => state.errors);
+  const { loadingStatus } = useSelector(state => state.loading);
   const [showSocialOption, setShowSocialOption] = useState(false);
+  const [cleanErrors, setCleanErrors] = useState({});
+  const [errorStatus, setErrorStatus] = useState(false);
 
-  useEffect(() => {}, []);
+  const dispatch = useDispatch();
+
+  //clear errors from redux store
+  useEffect(() => {
+    dispatch(clearErrors());
+  }, []);
+
+  useEffect(() => {
+    setCleanErrors({ ...errors });
+  }, [errors]);
 
   const layout = {
     labelCol: { span: 4 },
@@ -62,12 +75,32 @@ const AddProfile = () => {
   ];
 
   const handleSubmitProfile = value => {
-    console.log("form value", value);
+    const skills = {
+      frameworks: getSkills(popFrameworkList[0].frameworks),
+      languages: getSkills(popFrameworkList[0].languages),
+      tools: getSkills(popFrameworkList[0].tools)
+    };
+    value.resume["skills"] = skills;
+    console.log("all values", value.resume);
 
-    console.log("get frameworks: ", getSkills(popFrameworkList[0].frameworks));
+    //dispatch to add new resume
+    dispatch(addProfile(value.resume, history));
+    setErrorStatus(true);
   };
 
   const getSkills = skills => skills.filter(skill => skill.status === true);
+
+  //removing error alert from backend when input has been on change
+  const onInputChange = (value, type) => {
+    if (value) {
+      //hide error message for antd form
+      cleanErrors[type] = undefined;
+      setCleanErrors({ ...cleanErrors });
+      if (errors.loginFailed) {
+        errors.loginFailed = undefined;
+      }
+    }
+  };
 
   return (
     <Row>
@@ -95,17 +128,19 @@ const AddProfile = () => {
           validateMessages={validateMessages}
         >
           <Form.Item
-            name={["resume", "name"]}
+            name={["resume", "handle"]}
             label="Resume name"
             extra="A unique handle for resume URL, your full name, your company ect...(this CANNOT be changed later)."
+            {...validateStatus(cleanErrors.handle, errorStatus)}
             rules={[{ required: true }]}
           >
-            <Input />
+            <Input onChange={value => onInputChange(value, "handle")} />
           </Form.Item>
           <Form.Item
             name={["resume", "status"]}
             label="Status"
             extra="Give us an idea of where you are in at career."
+            {...validateStatus(cleanErrors.status, errorStatus)}
             rules={[
               {
                 required: true
@@ -135,15 +170,17 @@ const AddProfile = () => {
             name={["resume", "website"]}
             label="Website"
             extra="Your website or company website."
+            {...validateStatus(cleanErrors.website, errorStatus)}
           >
-            <Input />
+            <Input onChange={value => onInputChange(value, "website")} />
           </Form.Item>
           <Form.Item
             name={["resume", "github"]}
             label="Your Github"
             extra="Show your repos"
+            {...validateStatus(cleanErrors.github, errorStatus)}
           >
-            <Input />
+            <Input onChange={value => onInputChange(value, "github")} />
           </Form.Item>
           <Form.Item
             name={["resume", "city"]}
@@ -152,7 +189,7 @@ const AddProfile = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item name={["resume", "introduction"]} label="Introduction">
+          <Form.Item name={["resume", "bio"]} label="Introduction">
             <Input.TextArea
               placeholder="Bio..."
               extra="Tell us about yourself"
@@ -192,31 +229,52 @@ const AddProfile = () => {
           </Row>
           {showSocialOption && (
             <Col offset={4}>
-              <Form.Item name={["resume", "twitter"]}>
+              <Form.Item
+                name={["resume", "twitter"]}
+                {...validateStatus(cleanErrors.twitter, errorStatus)}
+              >
                 <Input
                   placeholder="Twitter profile URL"
                   prefix={<TwitterOutlined />}
+                  onChange={value => onInputChange(value, "twitter")}
                 />
               </Form.Item>
-              <Form.Item name={["resume", "facebook"]}>
+              <Form.Item
+                name={["resume", "facebook"]}
+                {...validateStatus(cleanErrors.facebook, errorStatus)}
+              >
                 <Input
                   placeholder="facebook profile URL"
                   prefix={<FacebookOutlined />}
+                  onChange={value => onInputChange(value, "facebook")}
                 />
               </Form.Item>
-              <Form.Item name={["resume", "linkedin"]}>
+              <Form.Item
+                name={["resume", "linkedin"]}
+                {...validateStatus(cleanErrors.linkedin, errorStatus)}
+              >
                 <Input
                   placeholder="Linkedin profile URL"
                   prefix={<LinkedinOutlined />}
+                  onChange={value => onInputChange(value, "linkedin")}
                 />
               </Form.Item>
-              <Form.Item name={["resume", "instagram"]}>
+              <Form.Item
+                name={["resume", "instagram"]}
+                {...validateStatus(cleanErrors.instagram, errorStatus)}
+              >
                 <Input
                   placeholder="Instagram profile URL"
                   prefix={<InstagramOutlined />}
+                  onChange={value => onInputChange(value, "instagram")}
                 />
               </Form.Item>
-              <Form.Item name={["resume", "Youtube"]}>
+              <Form.Item
+                name={["resume", "Youtube"]}
+                prefix={<YoutubeOutlined />}
+                {...validateStatus(cleanErrors.youtube, errorStatus)}
+                onChange={value => onInputChange(value, "youtube")}
+              >
                 <Input
                   placeholder="Youtube profile URL"
                   prefix={<TwitterOutlined />}
@@ -226,7 +284,12 @@ const AddProfile = () => {
           )}
 
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
-            <Button type="primary" htmlType="submit" block>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loadingStatus}
+              block
+            >
               Submit
             </Button>
           </Form.Item>
@@ -236,4 +299,4 @@ const AddProfile = () => {
   );
 };
 
-export default AddProfile;
+export default React.memo(AddProfile);

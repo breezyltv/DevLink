@@ -163,8 +163,9 @@ const IconSkillList = props => {
       }
     }
     //reset search to show all skills
-    if (isEmpty(value)) {
-      handleClear();
+    else {
+      setResultSearch(initSearch);
+      setIsSearching(false);
     }
   };
 
@@ -198,7 +199,13 @@ const IconSkillList = props => {
           //reset selected
           handleResetSelected(skill);
         } else {
-          setIsModalVisible(true);
+          if (cat !== "tools") {
+            setIsModalVisible(true);
+          } else {
+            skill.status = true;
+            skill.level = level;
+            setPopFrameworkList({ ...popFrameworkList });
+          }
         }
       } else {
         message.info("No " + split[1] + " founds in " + cat);
@@ -209,6 +216,8 @@ const IconSkillList = props => {
       setSelectSkill({ idx: index, cat: cat });
       if (!skill.status) {
         if (cat !== "tools") {
+          //console.log("check cat: ->", cat);
+
           setTitleModal(skill.title);
           setIsModalVisible(true);
         } else {
@@ -256,6 +265,7 @@ const IconSkillList = props => {
 
   const handleClear = () => {
     setResultSearch(initSearch);
+    initSkills(levelDefault);
     setIsSearching(false);
   };
 
@@ -273,10 +283,10 @@ const IconSkillList = props => {
       </Modal>
 
       <Row>
-        <Col offset={11}>
+        <Col offset={10}>
           <Space>
             <Button icon={<CloseSquareOutlined />} onClick={handleClear}>
-              Clear
+              Clear All
             </Button>
 
             <Input.Search

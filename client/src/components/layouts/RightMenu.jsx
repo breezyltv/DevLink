@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   LoginOutlined,
   UserOutlined,
@@ -15,6 +15,7 @@ import { upperFirstChar } from "../../utils/util";
 
 const RightMenu = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   //get current user
   const { isAuthenticated, admin, user } = useSelector(state => state.auth);
 
@@ -32,7 +33,7 @@ const RightMenu = () => {
   const logoutUser = () => {
     //clear current profile
     dispatch(clearCurrentProfile());
-    dispatch(logout());
+    dispatch(logout(history));
   };
 
   const settingDropMenu = (
@@ -53,7 +54,7 @@ const RightMenu = () => {
     <Menu mode="horizontal">
       <Menu.Item key="account">
         {user.avatar ? (
-          <Avatar src={<Image src={"https:" + user.avatar} />} />
+          <Avatar src={<Image src={user.avatar} />} />
         ) : (
           <Avatar icon={<UserOutlined />} />
         )}{" "}

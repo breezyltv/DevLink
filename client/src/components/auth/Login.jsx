@@ -13,6 +13,7 @@ import {
   AutoComplete,
   Alert
 } from "antd";
+import Animate from "rc-animate";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import { validateStatus, domains } from "../../utils/util";
@@ -141,11 +142,11 @@ const Login = () => {
               onChange={value => onInputChange(value, "password")}
             />
           </Form.Item>
-
-          {errors.loginFailed && (
-            <Alert message={errors.loginFailed} type="error" showIcon />
-          )}
-
+          <Animate transitionName="fade" transitionAppear>
+            {errors.loginFailed && (
+              <Alert message={errors.loginFailed} type="error" showIcon />
+            )}
+          </Animate>
           <Form.Item>
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>Remember me</Checkbox>

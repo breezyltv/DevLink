@@ -1,5 +1,4 @@
 import React from "react";
-//import { ReactLogo } from "@styled-icons/boxicons-logos";
 import {
   Rubyonrails,
   ReactLogo,

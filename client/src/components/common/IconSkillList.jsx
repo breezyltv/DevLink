@@ -30,8 +30,8 @@ import {
 } from "../../utils/util";
 import isEmpty from "../../utils/isEmpty_valid";
 import SkillCategory from "./SkillCategory";
+import { CloseSquareOutlined } from "@ant-design/icons";
 const { Title, Text } = Typography;
-const { Option } = Select;
 
 const IconSkillList = props => {
   const { popSkills } = props;
@@ -163,7 +163,7 @@ const IconSkillList = props => {
       }
     }
     //reset search to show all skills
-    if (isEmpty(value)) {
+    else {
       setResultSearch(initSearch);
       setIsSearching(false);
     }
@@ -199,7 +199,13 @@ const IconSkillList = props => {
           //reset selected
           handleResetSelected(skill);
         } else {
-          setIsModalVisible(true);
+          if (cat !== "tools") {
+            setIsModalVisible(true);
+          } else {
+            skill.status = true;
+            skill.level = level;
+            setPopFrameworkList({ ...popFrameworkList });
+          }
         }
       } else {
         message.info("No " + split[1] + " founds in " + cat);
@@ -210,6 +216,8 @@ const IconSkillList = props => {
       setSelectSkill({ idx: index, cat: cat });
       if (!skill.status) {
         if (cat !== "tools") {
+          //console.log("check cat: ->", cat);
+
           setTitleModal(skill.title);
           setIsModalVisible(true);
         } else {
@@ -254,6 +262,13 @@ const IconSkillList = props => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  const handleClear = () => {
+    setResultSearch(initSearch);
+    initSkills(levelDefault);
+    setIsSearching(false);
+  };
+
   return (
     <>
       <Modal
@@ -266,24 +281,28 @@ const IconSkillList = props => {
         <Title level={5}>Level:</Title>
         <Slider value={level} onChange={value => setLevel(value)} />
       </Modal>
-      <Divider orientation="left">
-        <Title level={4}>Skills:</Title>
-      </Divider>
+
       <Row>
-        <Col span={10} offset={12}>
-          <Input.Search
-            placeholder="enter input to search..."
-            onChange={e => handleSearch(e.target.value)}
-            loading={resultSearch.frameworks.loading}
-            enterButton
-            allowClear={true}
-            onSearch={() => {
-              console.log("final result", resultSearch);
-              console.log("final selected", popFrameworkList);
-            }}
-          />
+        <Col offset={10}>
+          <Space>
+            <Button icon={<CloseSquareOutlined />} onClick={handleClear}>
+              Clear All
+            </Button>
+
+            <Input.Search
+              placeholder="enter input to search..."
+              onChange={e => handleSearch(e.target.value)}
+              loading={resultSearch.frameworks.loading}
+              enterButton
+              allowClear={true}
+              onSearch={() => {
+                console.log("final result", resultSearch);
+                console.log("final selected", popFrameworkList);
+              }}
+            />
+          </Space>
+          <Divider />
         </Col>
-        <Divider />
       </Row>
 
       <SkillCategory

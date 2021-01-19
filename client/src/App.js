@@ -1,18 +1,21 @@
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect
 } from "react-router-dom";
+import { Layout, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import { auth } from "./actions/authAction";
+import { setLoadingAuth } from "./actions/loadingAction";
+
 import { useSelector, useDispatch } from "react-redux";
 import "./App.css";
 
 import HeaderLayout from "./components/layouts/Header";
 import FooterLayout from "./components/layouts/Footer";
-import { Layout, Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+
 import PrivateRoute from "./auth/PrivateRoute";
 //import Home from "./components/layouts/Home";
 const Home = lazy(() => import("./components/layouts/Home"));
@@ -24,6 +27,9 @@ const Login = lazy(() => import("./components/auth/Login"));
 
 const Dashboard = lazy(() => import("./components/dashboard/Dashboard"));
 const AddProfile = lazy(() => import("./components/profile/AddProfile"));
+const AddProject = lazy(() => import("./components/profile/AddProject"));
+const AddEducation = lazy(() => import("./components/profile/AddEducation"));
+const Resume = lazy(() => import("./components/dashboard/Resume"));
 
 const spinIcon = <LoadingOutlined style={{ fontSize: 30 }} spin />;
 
@@ -32,7 +38,10 @@ const { Content } = Layout;
 function App() {
   //const history = useHistory();
   const { isAuthenticated } = useSelector(state => state.auth);
+
   const dispatch = useDispatch();
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+  const { loadingAuth } = useSelector(state => state.loading);
 
   //check current user and set current user data
   useEffect(() => {
@@ -40,40 +49,84 @@ function App() {
     dispatch(auth());
   }, []);
 
+  useEffect(() => {
+    setIsLoadingAuth(loadingAuth);
+  }, [loadingAuth]);
+
+  let homeContent;
+
+  if (isLoadingAuth) {
+    homeContent = (
+      <Spin className="lazyContent" tip="Loading..." indicator={spinIcon} />
+    );
+  } else {
+    homeContent = (
+      <>
+        <Content style={{ padding: "0 60px" }}>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/dashboard"
+              component={Dashboard}
+              isAuthenticated={isAuthenticated}
+            />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/add-profile"
+              component={AddProfile}
+              isAuthenticated={isAuthenticated}
+            />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/add-project"
+              component={AddProject}
+              isAuthenticated={isAuthenticated}
+            />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/resume"
+              component={Resume}
+              isAuthenticated={isAuthenticated}
+            />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/add-edu"
+              component={AddEducation}
+              isAuthenticated={isAuthenticated}
+            />
+          </Switch>
+        </Content>
+      </>
+    );
+  }
+
   return (
     <Router>
       <Layout className="layout">
-        <HeaderLayout />
-        <Content style={{ padding: "0 60px" }}>
-          <Suspense
-            fallback={
-              <Spin
-                className="lazyContent"
-                tip="Loading..."
-                indicator={spinIcon}
-              />
-            }
-          >
-            <Route exact path="/" component={Home} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-            {isAuthenticated && (
-              <>
-                <Switch>
-                  <PrivateRoute exact path="/dashboard" component={Dashboard} />
-                </Switch>
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path="/add-profile"
-                    component={AddProfile}
-                  />
-                </Switch>
-              </>
-            )}
-          </Suspense>
-        </Content>
-        <FooterLayout />
+        <Suspense
+          fallback={
+            <Spin
+              className="lazyContent"
+              tip="Loading..."
+              indicator={spinIcon}
+            />
+          }
+        >
+          <HeaderLayout />
+          {homeContent}
+          <FooterLayout />
+        </Suspense>
       </Layout>
     </Router>
   );

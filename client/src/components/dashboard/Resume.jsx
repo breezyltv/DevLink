@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAdminProfile } from "../../actions/profileAction";
+import { getCurrentProfile } from "../../actions/profileAction";
 import ResumeHeader from "../common/resume-comp/ResumeHeader";
 import ResumeIntro from "../common/resume-comp/ResumeIntro";
 import ResumeSkills from "../common/resume-comp/ResumeSkills";
@@ -9,30 +9,30 @@ import ResumeExp from "../common/resume-comp/ResumeExp";
 import ResumeSocial from "../common/resume-comp/ResumeSocial";
 import { Divider, Row, Col, Skeleton } from "antd";
 
-const Home = () => {
-  const { profile_admin, loading } = useSelector(state => state.profile);
+const Resume = () => {
+  const { profile, loading } = useSelector(state => state.profile);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAdminProfile());
+    dispatch(getCurrentProfile());
   }, []);
 
   let aboutMe;
 
-  if (profile_admin === null || loading) {
+  if (profile === null || loading) {
     aboutMe = <Skeleton avatar active paragraph={{ rows: 5 }} />;
   } else {
     aboutMe = (
       <>
-        <ResumeHeader profile={profile_admin} />
+        <ResumeHeader profile={profile} />
         <Divider />
-        <ResumeIntro profile={profile_admin} />
+        <ResumeIntro profile={profile} />
         <Divider />
-        <ResumeSkills profile={profile_admin} />
+        <ResumeSkills profile={profile} />
         <Divider />
-        <ResumeExp profile={profile_admin} />
+        <ResumeExp profile={profile} />
         <Divider />
-        <ResumeSocial profile={profile_admin} />
+        <ResumeSocial profile={profile} />
       </>
     );
   }
@@ -46,4 +46,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Resume;

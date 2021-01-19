@@ -166,6 +166,127 @@
   border-bottom-color: transparent;
 }
 
+.site-page-header span {
+  font-size: 11pt;
+  color: #222f3e;
+}
+.site-page-header .ant-page-header-back {
+  padding: 4px;
+}
+
+.shadow-lg {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.site-layout-content {
+  margin: 30px 0;
+  padding: 48px;
+  background-color: #fafafa;
+}
+
+.site-layout-content .ant-typography {
+  background-color: #fafafa;
+}
+.resume-contact {
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  padding-left: 25px;
+}
+
+.resume-contact svg {
+  margin-right: 15px;
+}
+.resume-intro .ant-typography {
+  font-size: 1rem;
+}
+
+.resume-section-heading {
+  border-left: 4px solid;
+}
+
+.resume-section-heading h2 {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.15rem;
+  margin-bottom: 1rem;
+  /* color: #54b689; */
+}
+
+.resume-aside {
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  padding-left: 25px;
+}
+
+.resume-aside .ant-tag {
+  padding: 5px;
+  font-size: 0.8rem;
+}
+.resume-aside .ant-tag svg {
+  margin-right: 3px;
+}
+
+.resume-name {
+  font-size: 2.75rem;
+  font-weight: 900;
+  letter-spacing: 0.4rem;
+}
+.resume-tagline {
+  font-size: 1rem;
+  font-weight: 300;
+}
+.resume-contact {
+  font-size: 0.9;
+}
+.resume-skill {
+  margin-right: 40px;
+}
+.resume-skill-title {
+  display: inline !important;
+}
+.resume-skill-title .ant-typography {
+  font-weight: bold;
+  font-size: 1rem;
+  float: left;
+}
+.resume-skill-title .ant-typography svg {
+  margin-left: 10px;
+}
+.resume-skill-title .ant-progress {
+  margin-bottom: 10px;
+}
+
+.resume-skill-title .ant-progress-inner {
+  height: 12px;
+}
+.resume-skill-title .ant-progress-bg {
+  height: 12px !important;
+}
+
+.resume-lang-info {
+  margin-bottom: 30px;
+}
+
+.resume-lang-info .ant-typography svg {
+  margin-right: 6px;
+}
+.resume-lang-info .ant-typography {
+  border: 2px solid #34495e;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #34495e;
+}
+.resume-timeline {
+  margin-top: 30px;
+}
+.resume-social-list .ant-btn-link {
+  font-size: 1rem;
+  color: #282c34;
+}
+.ant-layout-footer {
+  background-color: #fafafa;
+  margin-top: 30px;
+}
+
 @media (max-width: 767px) {
   .barsMenu {
     display: inline-block;
@@ -188,12 +309,38 @@
   .logo a {
     padding: 10px 20px;
   }
-}
 
-.site-page-header span {
-  font-size: 11pt;
-  color: #222f3e;
-}
-.site-page-header .ant-page-header-back {
-  padding: 4px;
+  .resume-intro .ant-typography {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    text-align: justify;
+  }
+  .resume-contact {
+    border: 0;
+    padding-left: 0px;
+    margin-top: 20px;
+  }
+  .site-layout-content {
+    padding: 15px;
+  }
+  .ant-layout-content {
+    padding: 0 20px !important;
+  }
+  .menuBar {
+    padding: 0 20px;
+  }
+  .menuBar .logo {
+    display: inline-block;
+    margin-left: 5px;
+  }
+  .menuBar .logo img {
+    width: 50px;
+  }
+  .menuBar .logo a {
+    padding: 0;
+  }
+  .resume-aside {
+    border: none;
+    padding: 0;
+  }
 }

@@ -1,11 +1,15 @@
-import { REQUEST_LOADING } from "./actionTypes";
+import { REQUEST_LOADING, REQUEST_LOADING_AUTH } from "./actionTypes";
 //set LOADING
 export const setLoading = loadingStatus => {
-  const status = {
-    loadingStatus: loadingStatus
-  };
   return {
     type: REQUEST_LOADING,
-    payload: status
+    payload: loadingStatus
+  };
+};
+
+export const setLoadingAuth = loadingStatus => {
+  return {
+    type: REQUEST_LOADING_AUTH,
+    payload: loadingStatus
   };
 };

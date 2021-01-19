@@ -12,6 +12,7 @@ const User = require("../../model/User");
 const validateProfileInput = require("../../validation/profile_valid");
 const validateExpInput = require("../../validation/experience_valid");
 const validateEduInput = require("../../validation/education_valid");
+const validateProjectInput = require("../../validation/project_valid");
 
 // @route   GET api/profile/handle/:handle
 // @desc    get current profile by handle
@@ -40,7 +41,7 @@ router.get("/handle/:handle", (req, res) => {
 router.get("/user/:uid", (req, res) => {
   const errors = {};
   Profile.findOne({ user: req.params.uid })
-    .populate("user", ["first_name", "last_name", "avatar"])
+    .populate("user", ["first_name", "last_name", "avatar", "email"])
     .then(profile => {
       if (!profile) {
         errors.noProfile = "There is no profile for this user id";
@@ -109,7 +110,7 @@ router.get(
   (req, res) => {
     const errors = {};
     Profile.findOne({ user: req.user._id })
-      .populate("user", ["first_name", "last_name", "avatar"])
+      .populate("user", ["first_name", "last_name", "avatar", "email"])
       .then(profile => {
         if (!profile) {
           errors.noProfile = "there is no profile for this user";
@@ -242,6 +243,7 @@ router.post(
   "/education",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log(req.body);
     const { errors, isValid } = validateEduInput(req.body);
     //check validation
     if (!isValid) {
@@ -258,7 +260,7 @@ router.post(
         description: req.body.description
       };
       //add into profile
-      profile.experience.unshift(newEdu);
+      profile.education.unshift(newEdu);
       profile
         .save()
         .then(profile => res.send(profile))
@@ -268,26 +270,31 @@ router.post(
 );
 
 // @route   POST api/profile/project
-// @desc    add new profile education
+// @desc    add new project project
 // @access  Private
 router.post(
   "/project",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    // const { errors, isValid } = validateEduInput(req.body);
-    // //check validation
-    // if (!isValid) {
-    //   return res.status(400).send(errors);
-    // }
+    //console.log(req.body);
+
+    const { errors, isValid } = validateProjectInput(req.body);
+    //check validation
+    if (!isValid) {
+      return res.status(400).send(errors);
+    }
     Profile.findOne({ user: req.user._id }).then(profile => {
       const newProject = {
         title: req.body.title,
         github_link: req.body.github_link,
         description: req.body.description,
+        from: req.body.from,
+        to: req.body.to,
+        feature: req.body.feature,
         demo_link: req.body.demo_link
       };
       //add into profile
-      profile.experience.unshift(newProject);
+      profile.project.unshift(newProject);
       profile
         .save()
         .then(profile => res.send(profile))

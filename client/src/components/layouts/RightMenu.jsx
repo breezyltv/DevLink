@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   LoginOutlined,
   UserOutlined,
@@ -15,7 +15,7 @@ import { upperFirstChar } from "../../utils/util";
 
 const RightMenu = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  //const history = useHistory();
   //get current user
   const { isAuthenticated, admin, user } = useSelector(state => state.auth);
 
@@ -33,7 +33,7 @@ const RightMenu = () => {
   const logoutUser = () => {
     //clear current profile
     dispatch(clearCurrentProfile());
-    dispatch(logout(history));
+    dispatch(logout());
   };
 
   const settingDropMenu = (

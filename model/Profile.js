@@ -10,6 +10,12 @@ const ProfileSchema = new Schema({
     type: String,
     required: true
   },
+  position: {
+    type: String
+  },
+  phone: {
+    type: String
+  },
   company: {
     type: String
   },
@@ -53,11 +59,14 @@ const ProfileSchema = new Schema({
   github: {
     type: String
   },
-  project: [
+  projects: [
     {
       title: {
         type: String,
         required: true
+      },
+      feature: {
+        type: String
       },
       description: {
         type: String
@@ -67,6 +76,13 @@ const ProfileSchema = new Schema({
       },
       demo_link: {
         type: String
+      },
+      from: {
+        type: Date,
+        required: true
+      },
+      to: {
+        type: Date
       }
     }
   ],
@@ -106,8 +122,7 @@ const ProfileSchema = new Schema({
         required: true
       },
       degree: {
-        type: String,
-        required: true
+        type: String
       },
       major: {
         type: String,

@@ -293,3 +293,7 @@
   font-size: 1rem;
   color: #282c34;
 }
+.ant-layout-footer {
+  background-color: #fafafa;
+  margin-top: 30px;
+}

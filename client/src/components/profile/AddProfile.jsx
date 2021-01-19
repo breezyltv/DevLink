@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory, Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { validateStatus } from "../../utils/util";
 import { addProfile, clearErrors } from "../../actions/profileAction";
 import {
@@ -158,6 +158,13 @@ const AddProfile = () => {
                 </Option>
               ))}
             </Select>
+          </Form.Item>
+          <Form.Item
+            name={["resume", "position"]}
+            label="Job title"
+            extra="Which position are you in? frontend, backend or fullstack web developer..."
+          >
+            <Input />
           </Form.Item>
           <Form.Item
             name={["resume", "company"]}

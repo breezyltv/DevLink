@@ -27,6 +27,9 @@ const Login = lazy(() => import("./components/auth/Login"));
 
 const Dashboard = lazy(() => import("./components/dashboard/Dashboard"));
 const AddProfile = lazy(() => import("./components/profile/AddProfile"));
+const AddProject = lazy(() => import("./components/profile/AddProject"));
+const AddEducation = lazy(() => import("./components/profile/AddEducation"));
+const Resume = lazy(() => import("./components/dashboard/Resume"));
 
 const spinIcon = <LoadingOutlined style={{ fontSize: 30 }} spin />;
 
@@ -76,6 +79,30 @@ function App() {
               exact
               path="/add-profile"
               component={AddProfile}
+              isAuthenticated={isAuthenticated}
+            />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/add-project"
+              component={AddProject}
+              isAuthenticated={isAuthenticated}
+            />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/resume"
+              component={Resume}
+              isAuthenticated={isAuthenticated}
+            />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/add-edu"
+              component={AddEducation}
               isAuthenticated={isAuthenticated}
             />
           </Switch>

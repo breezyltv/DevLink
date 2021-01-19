@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   GET_ERRORS,
   GET_PROFILE,
+  GET_PROJECT,
   GET_PROFILES,
   PROFILE_LOADING,
   PROFILE_NOT_FOUND,
@@ -13,16 +14,14 @@ import {
 import { setLoading } from "./loadingAction";
 
 export const getCurrentProfile = () => async dispatch => {
+  dispatch(setProfileLoading());
   try {
-    dispatch(setLoading(true));
     const res = await axios.get("/api/profile");
     dispatch({
       type: GET_PROFILE,
       payload: res.data
     });
-    dispatch(setLoading(false));
   } catch (error) {
-    dispatch(setLoading(false));
     dispatch({
       type: GET_PROFILE,
       payload: {}
@@ -51,6 +50,48 @@ export const addProfile = (profileData, history) => async dispatch => {
   try {
     dispatch(setLoading(true));
     const res = await axios.post("/api/profile", profileData);
+    if (res) {
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      });
+      history.push("/dashboard");
+    }
+    dispatch(setLoading(false));
+  } catch (error) {
+    dispatch(setLoading(false));
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data
+    });
+  }
+};
+
+export const addProject = (projectData, history) => async dispatch => {
+  try {
+    dispatch(setLoading(true));
+    const res = await axios.post("/api/profile/project", projectData);
+    if (res) {
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      });
+      history.push("/dashboard");
+    }
+    dispatch(setLoading(false));
+  } catch (error) {
+    dispatch(setLoading(false));
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data
+    });
+  }
+};
+
+export const addEdu = (eduData, history) => async dispatch => {
+  try {
+    dispatch(setLoading(true));
+    const res = await axios.post("/api/profile/education", eduData);
     if (res) {
       dispatch({
         type: GET_PROFILE,

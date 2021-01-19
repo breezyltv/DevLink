@@ -94,7 +94,7 @@ export const auth = () => dispatch => {
 //   };
 // };
 
-export const logout = history => dispatch => {
+export const logout = () => dispatch => {
   //call API to remove token in cookie
   axios.get("api/users/logout").then(res => {
     console.log(res.data);

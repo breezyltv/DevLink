@@ -22,7 +22,8 @@ const profileReducer = (state = init, action) => {
     case GET_PROFILE:
       return {
         ...state,
-        profile: action.payload
+        profile: action.payload,
+        loading: false
       };
     case GET_ADMIN_PROFILE:
       return {

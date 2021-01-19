@@ -12,7 +12,7 @@ const ResumeHeader = ({ profile }) => {
   return (
     <>
       <Row>
-        <Col span={18}>
+        <Col sm={24} md={12} lg={18}>
           <Space direction="vertical">
             <div className="resume-name">
               <Title level={2}>
@@ -30,7 +30,7 @@ const ResumeHeader = ({ profile }) => {
           </Space>
         </Col>
 
-        <Col span={6}>
+        <Col sm={24} md={12} lg={6}>
           <div className="resume-contact">
             <Space direction="vertical">
               {profile.phone && (

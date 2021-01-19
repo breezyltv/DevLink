@@ -6,7 +6,7 @@ const { Title, Paragraph, Text } = Typography;
 const FooterLayout = () => (
   <Footer>
     <Row>
-      <Col span={8}>
+      <Col sm={24} lg={8}>
         <Typography>
           <Title level={4}>About</Title>
           <Paragraph>
@@ -20,7 +20,7 @@ const FooterLayout = () => (
           <Text>Dev Link ©2020 Created by Vu Le</Text>
         </Typography>
       </Col>
-      <Col span={7} offset={1}>
+      <Col sm={24} lg={7}>
         <Typography>
           <Title level={4}>Recent Projects</Title>
           <Space direction="vertical">
@@ -31,7 +31,7 @@ const FooterLayout = () => (
           </Space>
         </Typography>
       </Col>
-      <Col span={8}>
+      <Col sm={24} lg={8}>
         <Typography>
           <Title level={4}>Tags</Title>
         </Typography>

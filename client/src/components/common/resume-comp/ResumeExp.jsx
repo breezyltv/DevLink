@@ -8,7 +8,7 @@ const ResumeExp = ({ profile }) => {
   return (
     <>
       <Row>
-        <Col span={17}>
+        <Col sm={24} md={12} lg={18}>
           <div className="resume-section-heading">
             <Title level={2}>Projects-Experience</Title>
           </div>
@@ -29,7 +29,7 @@ const ResumeExp = ({ profile }) => {
             </Timeline>
           </div>
         </Col>
-        <Col span={6} offset={1}>
+        <Col sm={24} md={12} lg={6}>
           <div className="resume-section-heading">
             <Title level={2}>Education</Title>
           </div>

@@ -166,30 +166,6 @@
   border-bottom-color: transparent;
 }
 
-@media (max-width: 767px) {
-  .barsMenu {
-    display: inline-block;
-  }
-
-  .leftMenu,
-  .rightMenu {
-    display: none;
-  }
-
-  .logo a {
-    margin-left: -20px;
-  }
-
-  .menuCon .ant-menu-item,
-  .menuCon .ant-menu-submenu-title {
-    padding: 1px 20px;
-  }
-
-  .logo a {
-    padding: 10px 20px;
-  }
-}
-
 .site-page-header span {
   font-size: 11pt;
   color: #222f3e;
@@ -220,7 +196,6 @@
   margin-right: 15px;
 }
 .resume-intro .ant-typography {
-  margin-left: 25px;
   font-size: 1rem;
 }
 
@@ -262,19 +237,33 @@
 .resume-contact {
   font-size: 0.9;
 }
-.resume-skill-title .ant-typography h5 {
-  margin-right: 20px;
-  margin-top: 0;
-  margin-bottom: 15px;
+.resume-skill {
+  margin-right: 40px;
+}
+.resume-skill-title {
+  display: inline !important;
+}
+.resume-skill-title .ant-typography {
+  font-weight: bold;
+  font-size: 1rem;
+  float: left;
 }
 .resume-skill-title .ant-typography svg {
   margin-left: 10px;
 }
-.resume-skill-info .ant-progress {
-  margin-bottom: 17px;
+.resume-skill-title .ant-progress {
+  margin-bottom: 10px;
 }
+
+.resume-skill-title .ant-progress-inner {
+  height: 12px;
+}
+.resume-skill-title .ant-progress-bg {
+  height: 12px !important;
+}
+
 .resume-lang-info {
-  margin-top: 38px;
+  margin-bottom: 30px;
 }
 
 .resume-lang-info .ant-typography svg {
@@ -296,4 +285,62 @@
 .ant-layout-footer {
   background-color: #fafafa;
   margin-top: 30px;
+}
+
+@media (max-width: 767px) {
+  .barsMenu {
+    display: inline-block;
+  }
+
+  .leftMenu,
+  .rightMenu {
+    display: none;
+  }
+
+  .logo a {
+    margin-left: -20px;
+  }
+
+  .menuCon .ant-menu-item,
+  .menuCon .ant-menu-submenu-title {
+    padding: 1px 20px;
+  }
+
+  .logo a {
+    padding: 10px 20px;
+  }
+
+  .resume-intro .ant-typography {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    text-align: justify;
+  }
+  .resume-contact {
+    border: 0;
+    padding-left: 0px;
+    margin-top: 20px;
+  }
+  .site-layout-content {
+    padding: 15px;
+  }
+  .ant-layout-content {
+    padding: 0 20px !important;
+  }
+  .menuBar {
+    padding: 0 20px;
+  }
+  .menuBar .logo {
+    display: inline-block;
+    margin-left: 5px;
+  }
+  .menuBar .logo img {
+    width: 50px;
+  }
+  .menuBar .logo a {
+    padding: 0;
+  }
+  .resume-aside {
+    border: none;
+    padding: 0;
+  }
 }

@@ -294,7 +294,7 @@ router.post(
         demo_link: req.body.demo_link
       };
       //add into profile
-      profile.project.unshift(newProject);
+      profile.projects.unshift(newProject);
       profile
         .save()
         .then(profile => res.send(profile))
